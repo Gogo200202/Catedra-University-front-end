@@ -17,9 +17,9 @@ import { useLanguage } from "../../i18n/useLanguage.ts";
 const quickLinks: { labelKey: TranslationKey; path: string }[] = [
   { labelKey: "aboutUs.department", path: "/about" },
   { labelKey: "nav.teachers", path: "/teachers" },
-  { labelKey: "education.bachelor", path: "/education" },
-  { labelKey: "education.curricula", path: "/education" },
-  { labelKey: "research.projects", path: "/research" },
+  { labelKey: "education.bachelor", path: "/education/bachelor" },
+  { labelKey: "education.curricula", path: "/education/curricula" },
+  { labelKey: "research.projects", path: "/research/projects" },
   { labelKey: "nav.news", path: "/news" },
 ];
 

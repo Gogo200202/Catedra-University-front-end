@@ -1,14 +1,6 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Divider,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { ArrowForward, FormatQuote, Person } from "@mui/icons-material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { ArrowForward } from "@mui/icons-material";
+import { HeadOfDeptCard } from "../shared/HeadOfDeptCard.tsx";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function WelcomeSection() {
@@ -43,7 +35,8 @@ export function WelcomeSection() {
                 variant="outlined"
                 color="primary"
                 endIcon={<ArrowForward />}
-                href="#"
+                component="a"
+                href="/about"
                 sx={{ mt: 1 }}
               >
                 {t("welcome.readMore")}
@@ -51,45 +44,7 @@ export function WelcomeSection() {
             </Box>
           </Stack>
 
-          <Paper
-            elevation={3}
-            sx={{
-              p: 4,
-              textAlign: "center",
-              borderTop: 4,
-              borderColor: "secondary.main",
-              borderRadius: 2,
-            }}
-          >
-            <Avatar
-              sx={{
-                width: 120,
-                height: 120,
-                mx: "auto",
-                mb: 2,
-                bgcolor: "primary.light",
-              }}
-            >
-              <Person sx={{ fontSize: 72 }} />
-            </Avatar>
-            <Typography variant="h6" sx={{ fontWeight: 700, color: "primary.main" }}>
-              {t("welcome.headName")}
-            </Typography>
-            <Typography variant="subtitle2" sx={{ color: "secondary.main", mb: 2 }}>
-              {t("welcome.headRole")}
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ justifyContent: "center", alignItems: "flex-start" }}
-            >
-              <FormatQuote sx={{ color: "primary.light", transform: "scaleX(-1)" }} />
-              <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
-                {t("welcome.headQuote")}
-              </Typography>
-            </Stack>
-          </Paper>
+          <HeadOfDeptCard />
         </Box>
       </Container>
     </Box>

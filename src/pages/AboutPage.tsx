@@ -1,20 +1,17 @@
-import {
-  Avatar,
-  Box,
-  Chip,
-  Container,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { Person as PersonIcon, Verified } from "@mui/icons-material";
+import { Box, Chip, Container, Grid, List, ListItem, Paper, Stack, Typography } from "@mui/material";
+import { ArrowForward, Verified } from "@mui/icons-material";
+import { Link } from "react-router";
 import { PageHero } from "../components/layout/PageHero.tsx";
+import { HeadOfDeptCard } from "../components/shared/HeadOfDeptCard.tsx";
 import { accreditationItems, historyMilestones } from "../data/department.ts";
+import type { TranslationKey } from "../i18n/translations.ts";
 import { useLanguage } from "../i18n/useLanguage.ts";
+
+const subPageLinks: { labelKey: TranslationKey; path: string }[] = [
+  { labelKey: "aboutUs.headOfDept", path: "/about/head-of-department" },
+  { labelKey: "aboutUs.accreditation", path: "/about/accreditation" },
+  { labelKey: "aboutUs.history", path: "/about/history" },
+];
 
 export function AboutPage() {
   const { t, lang } = useLanguage();
@@ -51,70 +48,76 @@ export function AboutPage() {
               {t("welcome.p2")}
             </Typography>
 
-            <Divider sx={{ my: 2 }} />
-
-            <Typography variant="h5" component="h3" sx={{ color: "primary.main", fontWeight: 700 }}>
-              {t("about.historyTitle")}
-            </Typography>
-            <List disablePadding>
-              {historyMilestones.map((milestone) => (
-                <ListItem
-                  key={milestone.year}
-                  disableGutters
-                  sx={{ alignItems: "flex-start", gap: 2, py: 1 }}
+            <Stack spacing={1.25} sx={{ mt: 2 }}>
+              {subPageLinks.map(({ labelKey, path }) => (
+                <Paper
+                  key={path}
+                  elevation={0}
+                  component={Link}
+                  to={path}
+                  sx={{
+                    p: 2,
+                    px: 2.5,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    textDecoration: "none",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    color: "primary.main",
+                    fontWeight: 600,
+                    transition: "border-color 0.2s ease, background-color 0.2s ease",
+                    "&:hover": {
+                      borderColor: "secondary.main",
+                      backgroundColor: "action.hover",
+                      "& .arrow": { transform: "translateX(4px)" },
+                    },
+                  }}
                 >
-                  <Chip
-                    label={milestone.year}
-                    size="small"
-                    sx={{
-                      bgcolor: "primary.main",
-                      color: "common.white",
-                      fontWeight: 700,
-                      minWidth: 72,
-                    }}
-                  />
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {milestone.text[lang]}
-                  </Typography>
-                </ListItem>
+                  {t(labelKey)}
+                  <ArrowForward className="arrow" fontSize="small" />
+                </Paper>
               ))}
-            </List>
+            </Stack>
           </Stack>
 
-          <Paper
-            elevation={3}
-            sx={{
-              p: 4,
-              textAlign: "center",
-              borderTop: 4,
-              borderColor: "secondary.main",
-              borderRadius: 2,
-            }}
-          >
-            <Avatar sx={{ width: 110, height: 110, mx: "auto", mb: 2, bgcolor: "primary.light" }}>
-              <PersonIcon sx={{ fontSize: 64 }} />
-            </Avatar>
-            <Typography variant="h6" sx={{ fontWeight: 700, color: "primary.main" }}>
-              {t("welcome.headName")}
-            </Typography>
-            <Typography variant="subtitle2" sx={{ color: "secondary.main" }}>
-              {t("welcome.headRole")}
-            </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
-              {t("welcome.headQuote")}
-            </Typography>
-          </Paper>
+          <HeadOfDeptCard />
         </Box>
 
         <Box sx={{ mt: 7 }}>
-          <Typography
-            variant="h5"
-            component="h3"
-            sx={{ color: "primary.main", fontWeight: 700, mb: 3 }}
-          >
-            {t("about.accreditationTitle")}
-          </Typography>
+          <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "baseline", mb: 3, flexWrap: "wrap", gap: 1 }}>
+            <Typography variant="h5" component="h3" sx={{ color: "primary.main", fontWeight: 700 }}>
+              {t("about.historyTitle")}
+            </Typography>
+            <Link to="/about/history" style={{ fontSize: 14, color: "#ef6c00", fontWeight: 600, textDecoration: "none" }}>
+              {t("common.readMore")} →
+            </Link>
+          </Stack>
+          <List disablePadding>
+            {historyMilestones.slice(0, 3).map((milestone) => (
+              <ListItem key={milestone.year} disableGutters sx={{ alignItems: "flex-start", gap: 2, py: 1 }}>
+                <Chip
+                  label={milestone.year}
+                  size="small"
+                  sx={{ bgcolor: "primary.main", color: "common.white", fontWeight: 700, minWidth: 72 }}
+                />
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {milestone.text[lang]}
+                </Typography>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+        <Box sx={{ mt: 6 }}>
+          <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "baseline", mb: 3, flexWrap: "wrap", gap: 1 }}>
+            <Typography variant="h5" component="h3" sx={{ color: "primary.main", fontWeight: 700 }}>
+              {t("about.accreditationTitle")}
+            </Typography>
+            <Link to="/about/accreditation" style={{ fontSize: 14, color: "#ef6c00", fontWeight: 600, textDecoration: "none" }}>
+              {t("common.readMore")} →
+            </Link>
+          </Stack>
           <Grid container spacing={2}>
             {accreditationItems.map((item) => (
               <Grid key={item.title} size={{ xs: 12, sm: 6, md: 3 }}>

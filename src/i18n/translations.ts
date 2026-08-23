@@ -83,6 +83,7 @@ const en = {
 
   "common.language": "Language",
   "common.backHome": "Back to home",
+  "common.readMore": "Read more",
 
   "pages.aboutTitle": "About the Department",
   "pages.aboutSubtitle":
@@ -142,6 +143,44 @@ const en = {
   "notFound.title": "Page not found",
   "notFound.subtitle":
     "The page you are looking for does not exist or has been moved.",
+
+  "pages.headOfDeptSubtitle":
+    "Profile and responsibilities of the head of the department",
+  "pages.accreditationSubtitle":
+    "Accreditations and quality certificates of the university and the department",
+  "pages.historySubtitle": "Key milestones in the development of the department",
+  "pages.bachelorSubtitle": "Four-year degree courses after secondary education",
+  "pages.masterSubtitle": "Postgraduate programmes for further specialization",
+  "pages.doctoralSubtitle": "Doctoral studies in the scientific majors of the department",
+  "pages.curriculaSubtitle": "Full curricula by semester for every degree course",
+  "pages.schedulesSubtitle": "Weekly teaching schedules of the department",
+  "pages.projectsSubtitle": "Current and completed research projects of the department",
+  "pages.publicationsSubtitle": "Selected scientific publications of the academic staff",
+
+  "headOfDept.bio1":
+    "Prof. Rosen Ivanov holds a PhD in Computer Systems and Technologies and has more than twenty years of academic experience in teaching and research. His scientific interests are in the field of artificial intelligence, machine learning and intelligent data processing.",
+  "headOfDept.bio2":
+    "He is an author of over sixty scientific publications, a participant in national and international research projects and a long-time supervisor of diploma theses and doctoral students.",
+  "headOfDept.responsibilitiesTitle": "Responsibilities",
+  "headOfDept.resp1": "Organizes and coordinates the academic activity of the department",
+  "headOfDept.resp2": "Manages the academic staff development and annual work plans",
+  "headOfDept.resp3": "Represents the department before the university management",
+  "headOfDept.resp4": "Approves reports for accreditation and annual reviews",
+
+  "schedules.table.subject": "Subject",
+  "schedules.table.time": "Time",
+  "schedules.table.type": "Type",
+  "schedules.table.location": "Location",
+  "schedules.table.lecturer": "Lecturer",
+  "schedules.types.lecture": "Lecture",
+  "schedules.types.seminar": "Seminar",
+  "schedules.types.lab": "Lab",
+
+  "curricula.semesterLabel": "Semester",
+  "curricula.course": "Course",
+  "curricula.lectures": "Lectures/w",
+  "curricula.exercises": "Exercises/w",
+  "curricula.ects": "ECTS",
 };
 
 export type Dictionary = typeof en;
@@ -231,6 +270,7 @@ const bg: Dictionary = {
 
   "common.language": "Език",
   "common.backHome": "Обратно към началото",
+  "common.readMore": "Прочетете повече",
 
   "pages.aboutTitle": "За катедрата",
   "pages.aboutSubtitle":
@@ -290,6 +330,52 @@ const bg: Dictionary = {
   "notFound.title": "Страницата не е намерена",
   "notFound.subtitle":
     "Страницата, която търсите, не съществува или е била преместена.",
+
+  "pages.headOfDeptSubtitle":
+    "Профил и правомощия на ръководителя на катедрата",
+  "pages.accreditationSubtitle":
+    "Акредитации и сертификати за качество на университета и катедрата",
+  "pages.historySubtitle": "Ключови етапи в развитието на катедрата",
+  "pages.bachelorSubtitle": "Четиригодишно обучение след средно образование",
+  "pages.masterSubtitle": "Надградена подготовка за специализация",
+  "pages.doctoralSubtitle":
+    "Докторантури по научните специалности на катедрата",
+  "pages.curriculaSubtitle":
+    "Пълни учебни планове по семестри за всяка специалност",
+  "pages.schedulesSubtitle": "Седмични графици на учебните занятия",
+  "pages.projectsSubtitle":
+    "Текущи и приключили научноизследователски проекти на катедрата",
+  "pages.publicationsSubtitle":
+    "Избрани научни публикации на академичния състав",
+
+  "headOfDept.bio1":
+    "проф. Росен Иванов е доктор по специалност „Компютърни системи и технологии“ и има над двадесет години академичен опит в преподаването и изследователската дейност. Научните му интереси са в областта на изкуствения интелект, машинното обучение и интелигентната обработка на данни.",
+  "headOfDept.bio2":
+    "Той е автор на над шестдесет научни публикации, участник в национални и международни научни проекти и дългогодишен ръководител на дипломни работи и докторанти.",
+  "headOfDept.responsibilitiesTitle": "Правомощия",
+  "headOfDept.resp1":
+    "Организира и координира учебната дейност на катедрата",
+  "headOfDept.resp2":
+    "Управлява развитието на академичния състав и годишните планове",
+  "headOfDept.resp3":
+    "Представлява катедрата пред ръководството на университета",
+  "headOfDept.resp4":
+    "Одобрява справки за акредитация и годишни отчети",
+
+  "schedules.table.subject": "Дисциплина",
+  "schedules.table.time": "Час",
+  "schedules.table.type": "Вид",
+  "schedules.table.location": "Място",
+  "schedules.table.lecturer": "Преподавател",
+  "schedules.types.lecture": "Лекция",
+  "schedules.types.seminar": "Семинар",
+  "schedules.types.lab": "Упражнение",
+
+  "curricula.semesterLabel": "Семестър",
+  "curricula.course": "Дисциплина",
+  "curricula.lectures": "Лекции/седм.",
+  "curricula.exercises": "Упражнения/седм.",
+  "curricula.ects": "Кредити",
 };
 
 export const dictionaries: Record<Lang, Dictionary> = { en, bg };

@@ -40,9 +40,9 @@ const navItems: NavItem[] = [
     path: "/about",
     children: [
       { labelKey: "aboutUs.department", path: "/about" },
-      { labelKey: "aboutUs.headOfDept", path: "/about" },
-      { labelKey: "aboutUs.accreditation", path: "/about" },
-      { labelKey: "aboutUs.history", path: "/about" },
+      { labelKey: "aboutUs.headOfDept", path: "/about/head-of-department" },
+      { labelKey: "aboutUs.accreditation", path: "/about/accreditation" },
+      { labelKey: "aboutUs.history", path: "/about/history" },
     ],
   },
   { key: "teachers", labelKey: "nav.teachers", path: "/teachers" },
@@ -51,20 +51,20 @@ const navItems: NavItem[] = [
     labelKey: "nav.education",
     path: "/education",
     children: [
-      { labelKey: "education.bachelor", path: "/education" },
-      { labelKey: "education.master", path: "/education" },
-      { labelKey: "education.doctoral", path: "/education" },
-      { labelKey: "education.curricula", path: "/education" },
-      { labelKey: "education.schedules", path: "/education" },
+      { labelKey: "education.bachelor", path: "/education/bachelor" },
+      { labelKey: "education.master", path: "/education/master" },
+      { labelKey: "education.doctoral", path: "/education/doctoral" },
+      { labelKey: "education.curricula", path: "/education/curricula" },
+      { labelKey: "education.schedules", path: "/education/schedules" },
     ],
   },
   {
     key: "research",
     labelKey: "nav.research",
-    path: "/research",
+    path: "/research/projects",
     children: [
-      { labelKey: "research.publications", path: "/research" },
-      { labelKey: "research.projects", path: "/research" },
+      { labelKey: "research.projects", path: "/research/projects" },
+      { labelKey: "research.publications", path: "/research/publications" },
     ],
   },
   { key: "news", labelKey: "nav.news", path: "/news" },
@@ -192,11 +192,32 @@ export function NavBar() {
           </Typography>
           <Divider />
           <List onClick={() => setDrawerOpen(false)}>
-            {navItems.map((item) => (
-              <ListItemButton key={item.key} component={Link} to={item.path}>
-                <ListItemText primary={t(item.labelKey)} />
-              </ListItemButton>
-            ))}
+            {navItems.map((item) =>
+              item.children ? (
+                <Box key={item.key}>
+                  <ListItemButton component={Link} to={item.path}>
+                    <ListItemText primary={t(item.labelKey)} />
+                  </ListItemButton>
+                  {item.children.map((child) => (
+                    <ListItemButton
+                      key={`${item.key}-${child.labelKey}`}
+                      component={Link}
+                      to={child.path}
+                      sx={{ pl: 4 }}
+                    >
+                      <ListItemText
+                        primary={t(child.labelKey)}
+                        slotProps={{ primary: { sx: { fontSize: 14 } } }}
+                      />
+                    </ListItemButton>
+                  ))}
+                </Box>
+              ) : (
+                <ListItemButton key={item.key} component={Link} to={item.path}>
+                  <ListItemText primary={t(item.labelKey)} />
+                </ListItemButton>
+              ),
+            )}
           </List>
         </Box>
       </Drawer>
