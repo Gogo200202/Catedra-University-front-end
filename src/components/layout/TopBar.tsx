@@ -1,7 +1,8 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
-import { Email, Facebook, Phone } from "@mui/icons-material";
+import { DarkMode, Email, Facebook, LightMode, Phone } from "@mui/icons-material";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 import type { Lang } from "../../i18n/translations.ts";
+import { useThemeMode } from "../../theme/useThemeMode.ts";
 
 const langButtons: { lang: Lang; label: string }[] = [
   { lang: "en", label: "EN" },
@@ -10,6 +11,7 @@ const langButtons: { lang: Lang; label: string }[] = [
 
 export function TopBar() {
   const { lang, setLang } = useLanguage();
+  const { mode, toggleMode } = useThemeMode();
 
   return (
     <Box sx={{ bgcolor: "primary.dark", color: "primary.contrastText" }}>
@@ -56,6 +58,28 @@ export function TopBar() {
 
         <Stack direction="row" spacing={1}>
           <Facebook sx={{ fontSize: 18, alignSelf: "center" }} />
+          <Box
+            component="button"
+            aria-label="Toggle color mode"
+            onClick={toggleMode}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              p: 0.5,
+              border: "none",
+              borderRadius: 1,
+              cursor: "pointer",
+              bgcolor: "transparent",
+              color: "inherit",
+              "&:hover": { color: "secondary.light" },
+            }}
+          >
+            {mode === "light" ? (
+              <DarkMode sx={{ fontSize: 18 }} />
+            ) : (
+              <LightMode sx={{ fontSize: 18 }} />
+            )}
+          </Box>
           <Box
             sx={{
               display: "flex",

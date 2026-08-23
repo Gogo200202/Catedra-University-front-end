@@ -3,7 +3,6 @@ import {
   AppBar,
   Box,
   Button,
-  Collapse,
   Container,
   Divider,
   Drawer,
@@ -17,61 +16,67 @@ import {
   Typography,
 } from "@mui/material";
 import { ExpandMore, Menu as MenuIcon } from "@mui/icons-material";
+import { Link, useLocation } from "react-router";
 import type { TranslationKey } from "../../i18n/translations.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
 interface NavChild {
   labelKey: TranslationKey;
+  path: string;
 }
 
 interface NavItem {
   key: string;
   labelKey: TranslationKey;
+  path: string;
   children?: NavChild[];
 }
 
 const navItems: NavItem[] = [
-  { key: "home", labelKey: "nav.home" },
+  { key: "home", labelKey: "nav.home", path: "/" },
   {
     key: "about",
     labelKey: "nav.aboutUs",
+    path: "/about",
     children: [
-      { labelKey: "aboutUs.department" },
-      { labelKey: "aboutUs.headOfDept" },
-      { labelKey: "aboutUs.accreditation" },
-      { labelKey: "aboutUs.history" },
+      { labelKey: "aboutUs.department", path: "/about" },
+      { labelKey: "aboutUs.headOfDept", path: "/about" },
+      { labelKey: "aboutUs.accreditation", path: "/about" },
+      { labelKey: "aboutUs.history", path: "/about" },
     ],
   },
-  { key: "teachers", labelKey: "nav.teachers" },
+  { key: "teachers", labelKey: "nav.teachers", path: "/teachers" },
   {
     key: "education",
     labelKey: "nav.education",
+    path: "/education",
     children: [
-      { labelKey: "education.bachelor" },
-      { labelKey: "education.master" },
-      { labelKey: "education.doctoral" },
-      { labelKey: "education.curricula" },
-      { labelKey: "education.schedules" },
+      { labelKey: "education.bachelor", path: "/education" },
+      { labelKey: "education.master", path: "/education" },
+      { labelKey: "education.doctoral", path: "/education" },
+      { labelKey: "education.curricula", path: "/education" },
+      { labelKey: "education.schedules", path: "/education" },
     ],
   },
   {
     key: "research",
     labelKey: "nav.research",
+    path: "/research",
     children: [
-      { labelKey: "research.publications" },
-      { labelKey: "research.projects" },
+      { labelKey: "research.publications", path: "/research" },
+      { labelKey: "research.projects", path: "/research" },
     ],
   },
-  { key: "news", labelKey: "nav.news" },
-  { key: "contacts", labelKey: "nav.contacts" },
+  { key: "news", labelKey: "nav.news", path: "/news" },
+  { key: "contacts", labelKey: "nav.contacts", path: "/contacts" },
 ];
 
 export function NavBar() {
   const { t } = useLanguage();
+  const { pathname } = useLocation();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
   const handleOpenMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -86,11 +91,6 @@ export function NavBar() {
     setOpenMenu(null);
   };
 
-  const closeDrawer = () => {
-    setDrawerOpen(false);
-    setExpandedItem(null);
-  };
-
   return (
     <AppBar position="sticky" elevation={2}>
       <Container>
@@ -100,6 +100,7 @@ export function NavBar() {
               display: { xs: "flex", md: "none" },
               alignItems: "center",
               flexGrow: 1,
+              gap: 1,
             }}
           >
             <IconButton
@@ -111,7 +112,12 @@ export function NavBar() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            <Typography
+              variant="subtitle1"
+              component={Link}
+              to="/"
+              sx={{ fontWeight: 700, color: "inherit", textDecoration: "none" }}
+            >
               CST
             </Typography>
           </Box>
@@ -119,7 +125,7 @@ export function NavBar() {
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              alignItems: "center",
+              alignItems: "stretch",
               gap: 0.5,
             }}
           >
@@ -130,11 +136,7 @@ export function NavBar() {
                     color="inherit"
                     endIcon={<ExpandMore />}
                     onClick={(event) => handleOpenMenu(event, item.key)}
-                    sx={{
-                      px: 1.5,
-                      fontWeight:
-                        openMenu === item.key && anchorEl ? 700 : 400,
-                    }}
+                    sx={{ px: 1.5, height: "100%" }}
                   >
                     {t(item.labelKey)}
                   </Button>
@@ -147,6 +149,8 @@ export function NavBar() {
                     {item.children.map((child) => (
                       <MenuItem
                         key={child.labelKey}
+                        component={Link}
+                        to={child.path}
                         onClick={handleCloseMenu}
                         sx={{ fontSize: 14 }}
                       >
@@ -159,13 +163,14 @@ export function NavBar() {
                 <Button
                   key={item.key}
                   color="inherit"
-                  href="#"
+                  component={Link}
+                  to={item.path}
                   sx={{
                     px: 1.5,
-                    fontWeight: item.key === "home" ? 700 : 400,
-                    borderBottom: 3,
+                    fontWeight: pathname === item.path ? 700 : 400,
+                    borderBottom: "3px solid",
                     borderColor:
-                      item.key === "home" ? "secondary.main" : "transparent",
+                      pathname === item.path ? "secondary.main" : "transparent",
                     borderRadius: 0,
                   }}
                 >
@@ -177,11 +182,7 @@ export function NavBar() {
         </Toolbar>
       </Container>
 
-      <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
+      <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <Box sx={{ width: 280 }} role="presentation">
           <Typography
             variant="subtitle1"
@@ -190,55 +191,12 @@ export function NavBar() {
             {t("header.department")}
           </Typography>
           <Divider />
-          <List>
-            {navItems.map((item) =>
-              item.children ? (
-                <Box key={item.key}>
-                  <ListItemButton
-                    onClick={() =>
-                      setExpandedItem(
-                        expandedItem === item.key ? null : item.key,
-                      )
-                    }
-                  >
-                    <ListItemText primary={t(item.labelKey)} />
-                    <ExpandMore
-                      sx={{
-                        transform:
-                          expandedItem === item.key
-                            ? "rotate(180deg)"
-                            : "none",
-                        transition: "transform 0.2s",
-                      }}
-                    />
-                  </ListItemButton>
-                  <Collapse
-                    in={expandedItem === item.key}
-                    timeout="auto"
-                    unmountOnExit
-                  >
-                    <List disablePadding>
-                      {item.children.map((child) => (
-                        <ListItemButton
-                          key={child.labelKey}
-                          sx={{ pl: 4 }}
-                          onClick={closeDrawer}
-                        >
-                          <ListItemText
-                            primary={t(child.labelKey)}
-                            slotProps={{ primary: { sx: { fontSize: 14 } } }}
-                          />
-                        </ListItemButton>
-                      ))}
-                    </List>
-                  </Collapse>
-                </Box>
-              ) : (
-                <ListItemButton key={item.key} onClick={closeDrawer}>
-                  <ListItemText primary={t(item.labelKey)} />
-                </ListItemButton>
-              ),
-            )}
+          <List onClick={() => setDrawerOpen(false)}>
+            {navItems.map((item) => (
+              <ListItemButton key={item.key} component={Link} to={item.path}>
+                <ListItemText primary={t(item.labelKey)} />
+              </ListItemButton>
+            ))}
           </List>
         </Box>
       </Drawer>

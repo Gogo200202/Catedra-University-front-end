@@ -1,5 +1,6 @@
 import { Avatar, Box, Container, IconButton, InputBase, Paper, Stack, Typography } from "@mui/material";
 import { AccountBalance, Search } from "@mui/icons-material";
+import { Link } from "react-router";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function Header() {
@@ -24,8 +25,8 @@ export function Header() {
           </Typography>
           <Typography
             variant="h5"
-            component="a"
-            href="/"
+            component={Link}
+            to="/"
             sx={{
               fontWeight: 700,
               color: "primary.main",

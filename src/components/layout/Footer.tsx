@@ -10,16 +10,17 @@ import {
   Typography,
 } from "@mui/material";
 import { Email, Facebook, LinkedIn, Phone, Place, YouTube } from "@mui/icons-material";
+import { Link as RouterLink } from "react-router";
 import type { TranslationKey } from "../../i18n/translations.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
-const quickLinks: TranslationKey[] = [
-  "aboutUs.department",
-  "nav.teachers",
-  "education.bachelor",
-  "education.curricula",
-  "research.projects",
-  "nav.news",
+const quickLinks: { labelKey: TranslationKey; path: string }[] = [
+  { labelKey: "aboutUs.department", path: "/about" },
+  { labelKey: "nav.teachers", path: "/teachers" },
+  { labelKey: "education.bachelor", path: "/education" },
+  { labelKey: "education.curricula", path: "/education" },
+  { labelKey: "research.projects", path: "/research" },
+  { labelKey: "nav.news", path: "/news" },
 ];
 
 export function Footer() {
@@ -65,15 +66,16 @@ export function Footer() {
                 {t("footer.quickLinks")}
               </Typography>
               <List disablePadding dense>
-                {quickLinks.map((key) => (
-                  <ListItem key={key} disableGutters sx={{ py: 0.25 }}>
+                {quickLinks.map(({ labelKey, path }) => (
+                  <ListItem key={labelKey} disableGutters sx={{ py: 0.25 }}>
                     <Link
-                      href="#"
+                      component={RouterLink}
+                      to={path}
                       variant="body2"
                       underline="hover"
                       sx={{ color: "text.secondary" }}
                     >
-                      {t(key)}
+                      {t(labelKey)}
                     </Link>
                   </ListItem>
                 ))}

@@ -26,6 +26,8 @@ const en = {
 
   "research.publications": "Publications",
   "research.projects": "Research Projects",
+  "research.funding": "Funded by",
+  "research.selectedPublications": "Selected Publications",
 
   "slide1.title": "Welcome to the Department of Computer Systems and Technologies",
   "slide1.subtitle":
@@ -80,6 +82,66 @@ const en = {
   "footer.rights": "All rights reserved.",
 
   "common.language": "Language",
+  "common.backHome": "Back to home",
+
+  "pages.aboutTitle": "About the Department",
+  "pages.aboutSubtitle":
+    "Tradition, quality and modern engineering education at TU — Gabrovo",
+  "pages.teachersTitle": "Academic Staff",
+  "pages.teachersSubtitle":
+    "Teachers of the Department of Computer Systems and Technologies",
+  "pages.educationTitle": "Education",
+  "pages.educationSubtitle":
+    "Bachelor, master and doctoral programmes of the department",
+  "pages.researchTitle": "Research",
+  "pages.researchSubtitle":
+    "Scientific projects and publications of the academic staff",
+  "pages.newsTitle": "News and Events",
+  "pages.newsSubtitle":
+    "Exam sessions, thesis defences, guest lectures and conferences",
+  "pages.contactsTitle": "Contacts",
+  "pages.contactsSubtitle": "How to reach the department",
+
+  "about.overline": "Who we are",
+  "about.universityText":
+    "The Technical University of Gabrovo is an accredited public higher education institution founded in 1964. It is accredited by the National Evaluation and Accreditation Agency, as well as by IGIP and FEANI, and holds an ISO 9001 certified quality management system.",
+  "about.accreditationTitle": "Accreditation and Quality",
+  "about.historyTitle": "Department History",
+
+  "positions.professor": "Professor",
+  "positions.assocProfessor": "Assoc. Professor",
+  "positions.chiefAssistant": "Chief Assistant",
+  "positions.assistant": "Assistant",
+
+  "teachers.searchPlaceholder": "Search by name or interest…",
+  "teachers.filterAll": "All positions",
+  "teachers.foundLabel": "teacher(s) found",
+
+  "education.semestersLabel": "semesters",
+  "education.curriculaTitle": "Curricula and schedules",
+  "education.curriculaText":
+    "Current curricula for all degree courses, weekly schedules and exam sessions are maintained in the department information system. Students can export their personal programme in PDF format.",
+
+  "news.filterAll": "All",
+  "news.categories.exams": "Exams",
+  "news.categories.defences": "Defences",
+  "news.categories.events": "Events",
+  "news.categories.lectures": "Lectures",
+  "news.categories.conference": "Conference",
+
+  "contacts.hours": "Office hours",
+  "contacts.hoursValue": "Monday – Friday, 08:30 – 17:00",
+  "contacts.formTitle": "Ask a question",
+  "contacts.formName": "Your name",
+  "contacts.formEmail": "Your email",
+  "contacts.formMessage": "Message",
+  "contacts.formSend": "Send request",
+  "contacts.formSuccess": "Thank you! Your message has been sent.",
+  "contacts.mapPlaceholder": "4 Hadzhi Dimitar Str., Gabrovo",
+
+  "notFound.title": "Page not found",
+  "notFound.subtitle":
+    "The page you are looking for does not exist or has been moved.",
 };
 
 export type Dictionary = typeof en;
@@ -111,6 +173,8 @@ const bg: Dictionary = {
 
   "research.publications": "Публикации",
   "research.projects": "Научни проекти",
+  "research.funding": "Финансиран от",
+  "research.selectedPublications": "Избрани публикации",
 
   "slide1.title":
     "Добре дошли в катедра „Компютърни системи и технологии“",
@@ -166,6 +230,66 @@ const bg: Dictionary = {
   "footer.rights": "Всички права запазени.",
 
   "common.language": "Език",
+  "common.backHome": "Обратно към началото",
+
+  "pages.aboutTitle": "За катедрата",
+  "pages.aboutSubtitle":
+    "Традиция, качество и модерно инженерно образование в ТУ – Габрово",
+  "pages.teachersTitle": "Академичен състав",
+  "pages.teachersSubtitle":
+    "Преподаватели в катедра „Компютърни системи и технологии“",
+  "pages.educationTitle": "Обучение",
+  "pages.educationSubtitle":
+    "Бакалавърски, магистърски и докторски програми на катедрата",
+  "pages.researchTitle": "Научна дейност",
+  "pages.researchSubtitle":
+    "Научни проекти и публикации на академичния състав",
+  "pages.newsTitle": "Новини и събития",
+  "pages.newsSubtitle":
+    "Изпитни сесии, защити, гостуващи лекции и конференции",
+  "pages.contactsTitle": "Контакти",
+  "pages.contactsSubtitle": "Как да се свържете с катедрата",
+
+  "about.overline": "Кои сме ние",
+  "about.universityText":
+    "Техническият университет в Габрово е акредитирано държавно висше училище, основано през 1964 година. Акредитиран е от Националната агенция за оценяване и акредитация, както и от IGIP и FEANI, и поддържа сертифицирана по ISO 9001 система за управление на качеството.",
+  "about.accreditationTitle": "Акредитация и качество",
+  "about.historyTitle": "История на катедрата",
+
+  "positions.professor": "Професор",
+  "positions.assocProfessor": "Доцент",
+  "positions.chiefAssistant": "Гл. асистент",
+  "positions.assistant": "Асистент",
+
+  "teachers.searchPlaceholder": "Търсене по име или интерес…",
+  "teachers.filterAll": "Всички длъжности",
+  "teachers.foundLabel": "намерени преподаватели",
+
+  "education.semestersLabel": "семестъра",
+  "education.curriculaTitle": "Учебни планове и графици",
+  "education.curriculaText":
+    "Актуалните учебни планове по всички специалности, седмичните графици и изпитните сесии се поддържат в информационната система на катедрата. Студентите могат да експортират личната си програма в PDF формат.",
+
+  "news.filterAll": "Всички",
+  "news.categories.exams": "Изпити",
+  "news.categories.defences": "Защити",
+  "news.categories.events": "Събития",
+  "news.categories.lectures": "Лекции",
+  "news.categories.conference": "Конференция",
+
+  "contacts.hours": "Приемно време",
+  "contacts.hoursValue": "Понеделник – Петък, 08:30 – 17:00",
+  "contacts.formTitle": "Задайте въпрос",
+  "contacts.formName": "Вашето име",
+  "contacts.formEmail": "Вашият имейл",
+  "contacts.formMessage": "Съобщение",
+  "contacts.formSend": "Изпрати запитване",
+  "contacts.formSuccess": "Благодарим! Вашето съобщение беше изпратено.",
+  "contacts.mapPlaceholder": "ул. „Хаджи Димитър“ 4, Габрово",
+
+  "notFound.title": "Страницата не е намерена",
+  "notFound.subtitle":
+    "Страницата, която търсите, не съществува или е била преместена.",
 };
 
 export const dictionaries: Record<Lang, Dictionary> = { en, bg };
