@@ -15,6 +15,7 @@ import {
 import { MailOutlined, Room } from "@mui/icons-material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { PageHero } from "../components/layout/PageHero.tsx";
+import { Link } from "react-router";
 import { teacherDisplayName, teachers } from "../data/teachers.ts";
 import type { TeacherSummary } from "../data/teachers.ts";
 import type { TranslationKey } from "../i18n/translations.ts";
@@ -124,20 +125,26 @@ export function TeachersPage() {
           }}
         >
           {filtered.map((teacher, index) => (
-            <Paper
+            <Box
               key={teacher.id}
-              elevation={1}
-              sx={{
-                p: 3,
-                display: "flex",
-                flexDirection: "column",
-                gap: 1.5,
-                borderTop: 4,
-                borderColor: "primary.main",
-                transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
-              }}
+              component={Link}
+              to={`/teachers/${teacher.id}`}
+              sx={{ display: "block", textDecoration: "none", color: "inherit" }}
             >
+              <Paper
+                elevation={1}
+                sx={{
+                  p: 3,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1.5,
+                  height: "100%",
+                  borderTop: 4,
+                  borderColor: "primary.main",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
+                }}
+              >
               <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
                 <Avatar sx={{ bgcolor: avatarColors[index % avatarColors.length], width: 52, height: 52 }}>
                   {initials(teacher)}
@@ -174,7 +181,8 @@ export function TeachersPage() {
                   </Typography>
                 </Stack>
               </Box>
-            </Paper>
+              </Paper>
+            </Box>
           ))}
         </Box>
 

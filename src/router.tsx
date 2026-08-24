@@ -24,6 +24,11 @@ const HistoryPage = lazy(() =>
 const TeachersPage = lazy(() =>
   import("./pages/TeachersPage.tsx").then((m) => ({ default: m.TeachersPage })),
 );
+const TeacherDetailPage = lazy(() =>
+  import("./pages/TeacherDetailPage.tsx").then((m) => ({
+    default: m.TeacherDetailPage,
+  })),
+);
 const BachelorProgrammesPage = lazy(() =>
   import("./pages/BachelorProgrammesPage.tsx").then((m) => ({
     default: m.BachelorProgrammesPage,
@@ -104,6 +109,7 @@ export const router = createBrowserRouter([
       { path: "/about/accreditation", Component: AccreditationPage },
       { path: "/about/history", Component: HistoryPage },
       { path: "/teachers", Component: TeachersPage },
+      { path: "/teachers/:id", Component: TeacherDetailPage },
       {
         path: "/education",
         lazy: async () => {
