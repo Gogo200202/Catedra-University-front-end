@@ -92,3 +92,74 @@ export const kstBachelorCurriculum: CurriculumSemester[] = [
     ],
   },
 ];
+
+export const kstMasterCurriculum: CurriculumSemester[] = [
+  {
+    semester: 1,
+    courses: [
+      { name: { en: "Software Architecture and Design", bg: "Софтуерна архитектура и дизайн" }, lecturesPerWeek: 2, exercisesPerWeek: 2, ects: 6 },
+      { name: { en: "Advanced Databases", bg: "Разширени бази от данни" }, lecturesPerWeek: 2, exercisesPerWeek: 2, ects: 5 },
+      { name: { en: "Human-Computer Interaction", bg: "Взаимодействие човек–компютър" }, lecturesPerWeek: 2, exercisesPerWeek: 1, ects: 5 },
+      { name: { en: "Research Methods and Scientific Writing", bg: "Методи на изследването и научно писане" }, lecturesPerWeek: 2, exercisesPerWeek: 0, ects: 4 },
+    ],
+  },
+  {
+    semester: 2,
+    courses: [
+      { name: { en: "Cloud Application Development", bg: "Разработване на облачни приложения" }, lecturesPerWeek: 2, exercisesPerWeek: 2, ects: 6 },
+      { name: { en: "Data Mining and Big Data Analytics", bg: "Извличане на данни и анализ на големи данни" }, lecturesPerWeek: 3, exercisesPerWeek: 1, ects: 6 },
+      { name: { en: "DevOps and Continuous Delivery", bg: "DevOps и непрекъснато доставяне" }, lecturesPerWeek: 2, exercisesPerWeek: 2, ects: 5 },
+      { name: { en: "Elective Course (Master)", bg: "Избираема дисциплина (магистърска)" }, lecturesPerWeek: 2, exercisesPerWeek: 1, ects: 4 },
+    ],
+  },
+  {
+    semester: 3,
+    courses: [
+      { name: { en: "Diploma Thesis (Master)", bg: "Дипломна работа (магистърска)" }, lecturesPerWeek: 0, exercisesPerWeek: 8, ects: 24 },
+      { name: { en: "Professional Internship", bg: "Професионална практика" }, lecturesPerWeek: 0, exercisesPerWeek: 4, ects: 6 },
+    ],
+  },
+];
+
+export const kstDoctoralCurriculum: CurriculumSemester[] = [
+  {
+    semester: 1,
+    courses: [
+      { name: { en: "Doctoral Courses I", bg: "Докторантски курсове I" }, lecturesPerWeek: 2, exercisesPerWeek: 1, ects: 8 },
+      { name: { en: "Preparation for Specialist Examination", bg: "Подготовка за изпит по специалността" }, lecturesPerWeek: 0, exercisesPerWeek: 2, ects: 10 },
+    ],
+  },
+  {
+    semester: 2,
+    courses: [
+      { name: { en: "Doctoral Courses II", bg: "Докторантски курсове II" }, lecturesPerWeek: 2, exercisesPerWeek: 1, ects: 8 },
+      { name: { en: "Research Work I", bg: "Изследователска работа I" }, lecturesPerWeek: 0, exercisesPerWeek: 6, ects: 22 },
+    ],
+  },
+  {
+    semester: 3,
+    courses: [
+      { name: { en: "Specialist Examination", bg: "Изпит по специалността" }, lecturesPerWeek: 0, exercisesPerWeek: 4, ects: 12 },
+      { name: { en: "Research Work II", bg: "Изследователска работа II" }, lecturesPerWeek: 0, exercisesPerWeek: 6, ects: 18 },
+    ],
+  },
+  {
+    semester: 4,
+    courses: [
+      { name: { en: "Research Work III", bg: "Изследователска работа III" }, lecturesPerWeek: 0, exercisesPerWeek: 10, ects: 30 },
+    ],
+  },
+  {
+    semester: 5,
+    courses: [
+      { name: { en: "Publications and Conference Participation", bg: "Публикации и участие в научни форуми" }, lecturesPerWeek: 0, exercisesPerWeek: 4, ects: 15 },
+      { name: { en: "Teaching Practice", bg: "Учебна практика" }, lecturesPerWeek: 0, exercisesPerWeek: 2, ects: 15 },
+    ],
+  },
+  {
+    semester: 6,
+    courses: [
+      { name: { en: "Dissertation Preparation and Defence", bg: "Подготовка и защита на дисертация" }, lecturesPerWeek: 0, exercisesPerWeek: 12, ects: 60 },
+    ],
+  },
+];

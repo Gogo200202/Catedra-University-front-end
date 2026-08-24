@@ -187,6 +187,8 @@ const en = {
   "curricula.lectures": "Lectures/w",
   "curricula.exercises": "Exercises/w",
   "curricula.ects": "ECTS",
+  "curricula.exportCsv": "CSV",
+  "curricula.exportPdf": "PDF",
 };
 
 export type Dictionary = typeof en;
@@ -388,6 +390,8 @@ const bg: Dictionary = {
   "curricula.lectures": "Лекции/седм.",
   "curricula.exercises": "Упражнения/седм.",
   "curricula.ects": "Кредити",
+  "curricula.exportCsv": "CSV",
+  "curricula.exportPdf": "PDF",
 };
 
 export const dictionaries: Record<Lang, Dictionary> = { en, bg };
