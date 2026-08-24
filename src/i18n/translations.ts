@@ -47,6 +47,8 @@ const en = {
   "systems.epublishing": "E-Publishing",
   "systems.journal": "Journal of TU – Gabrovo",
   "systems.career": "Career Centre",
+  "systems.featuresTitle": "What you will find",
+  "systems.openPlatform": "Open the platform",
 
   "programmes.overline": "Study with us",
   "programmes.title": "Degree Programmes",
@@ -156,6 +158,10 @@ const en = {
   "pages.schedulesSubtitle": "Weekly teaching schedules of the department",
   "pages.projectsSubtitle": "Current and completed research projects of the department",
   "pages.publicationsSubtitle": "Selected scientific publications of the academic staff",
+  "pages.umisSubtitle": "Academic records, schedules and electronic services for students",
+  "pages.epublishingSubtitle": "Textbooks, monographs and proceedings in open access",
+  "pages.journalSubtitle": "Peer-reviewed scientific journal of the university",
+  "pages.careerSubtitle": "Professional realisation of students and graduates",
 
   "headOfDept.bio1":
     "Prof. Rosen Ivanov holds a PhD in Computer Systems and Technologies and has more than twenty years of academic experience in teaching and research. His scientific interests are in the field of artificial intelligence, machine learning and intelligent data processing.",
@@ -234,6 +240,8 @@ const bg: Dictionary = {
   "systems.epublishing": "Електронни издания",
   "systems.journal": "Списание на ТУ – Габрово",
   "systems.career": "Кариерен център",
+  "systems.featuresTitle": "Какво ще откриете",
+  "systems.openPlatform": "Отвори платформата",
 
   "programmes.overline": "Учи при нас",
   "programmes.title": "Образователни степени",
@@ -347,6 +355,10 @@ const bg: Dictionary = {
     "Текущи и приключили научноизследователски проекти на катедрата",
   "pages.publicationsSubtitle":
     "Избрани научни публикации на академичния състав",
+  "pages.umisSubtitle": "Академично досие, графици и електронни услуги за студенти",
+  "pages.epublishingSubtitle": "Учебници, монографии и доклади с отворен достъп",
+  "pages.journalSubtitle": "Рецензирано научно списание на университета",
+  "pages.careerSubtitle": "Професионална реализация на студенти и выпускници",
 
   "headOfDept.bio1":
     "проф. Росен Иванов е доктор по специалност „Компютърни системи и технологии“ и има над двадесет години академичен опит в преподаването и изследователската дейност. Научните му интереси са в областта на изкуствения интелект, машинното обучение и интелигентната обработка на данни.",

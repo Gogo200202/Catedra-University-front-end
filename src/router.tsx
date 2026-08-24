@@ -62,6 +62,22 @@ const ContactsPage = lazy(() =>
 const NotFoundPage = lazy(() =>
   import("./pages/NotFoundPage.tsx").then((m) => ({ default: m.NotFoundPage })),
 );
+const UmisPage = lazy(() =>
+  import("./pages/UmisPage.tsx").then((m) => ({ default: m.UmisPage })),
+);
+const EPublishingPage = lazy(() =>
+  import("./pages/EPublishingPage.tsx").then((m) => ({
+    default: m.EPublishingPage,
+  })),
+);
+const JournalPage = lazy(() =>
+  import("./pages/JournalPage.tsx").then((m) => ({ default: m.JournalPage })),
+);
+const CareerCentrePage = lazy(() =>
+  import("./pages/CareerCentrePage.tsx").then((m) => ({
+    default: m.CareerCentrePage,
+  })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -96,6 +112,10 @@ export const router = createBrowserRouter([
       { path: "/research/publications", Component: PublicationsPage },
       { path: "/news", Component: NewsPage },
       { path: "/contacts", Component: ContactsPage },
+      { path: "/systems/umis", Component: UmisPage },
+      { path: "/systems/e-publishing", Component: EPublishingPage },
+      { path: "/systems/journal", Component: JournalPage },
+      { path: "/systems/career", Component: CareerCentrePage },
       { path: "*", Component: NotFoundPage },
     ],
   },

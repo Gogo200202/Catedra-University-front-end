@@ -1,5 +1,6 @@
 import { Box, CardActionArea, Container, Stack, Typography } from "@mui/material";
 import { ArrowForward, Engineering, School, Science } from "@mui/icons-material";
+import { Link } from "react-router";
 import type { TranslationKey } from "../../i18n/translations.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
@@ -8,6 +9,7 @@ interface Programme {
   descKey: TranslationKey;
   gradient: string;
   Icon: typeof School;
+  path: string;
 }
 
 const programmes: Programme[] = [
@@ -16,18 +18,21 @@ const programmes: Programme[] = [
     descKey: "programmes.bachelor.desc",
     gradient: "linear-gradient(135deg, #0d3b66, #2d7fc1)",
     Icon: School,
+    path: "/education/bachelor",
   },
   {
     titleKey: "education.master",
     descKey: "programmes.master.desc",
     gradient: "linear-gradient(135deg, #283593, #5c6bc0)",
     Icon: Engineering,
+    path: "/education/master",
   },
   {
     titleKey: "education.doctoral",
     descKey: "programmes.doctoral.desc",
     gradient: "linear-gradient(135deg, #00695c, #26a69a)",
     Icon: Science,
+    path: "/education/doctoral",
   },
 ];
 
@@ -55,7 +60,7 @@ export function ProgrammesSection() {
           gridTemplateColumns: { xs: "1fr", sm: "repeat(3, 1fr)" },
         }}
       >
-        {programmes.map(({ titleKey, descKey, gradient, Icon }) => (
+        {programmes.map(({ titleKey, descKey, gradient, Icon, path }) => (
           <Box
             key={titleKey}
             sx={{
@@ -70,7 +75,7 @@ export function ProgrammesSection() {
               },
             }}
           >
-            <CardActionArea href="#" sx={{ height: "100%" }}>
+            <CardActionArea component={Link} to={path} sx={{ height: "100%" }}>
               <Box
                 sx={{
                   height: 140,
