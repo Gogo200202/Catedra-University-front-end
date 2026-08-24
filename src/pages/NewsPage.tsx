@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { PageHero } from "../components/layout/PageHero.tsx";
+import { Link } from "react-router";
 import { news } from "../data/news.ts";
 import type { NewsCategory } from "../data/news.ts";
 import type { Lang, TranslationKey } from "../i18n/translations.ts";
@@ -68,16 +69,21 @@ export function NewsPage() {
           {filtered.map((item) => {
             const { day, monthYear } = formatDate(item.date, lang);
             return (
-              <Paper
+              <Box
                 key={item.id}
-                elevation={1}
-                sx={{
-                  display: "flex",
-                  overflow: "hidden",
-                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                  "&:hover": { transform: "translateY(-3px)", boxShadow: 6 },
-                }}
+                component={Link}
+                to={`/news/${item.id}`}
+                sx={{ display: "block", textDecoration: "none", color: "inherit" }}
               >
+                <Paper
+                  elevation={1}
+                  sx={{
+                    display: "flex",
+                    overflow: "hidden",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    "&:hover": { transform: "translateY(-3px)", boxShadow: 6 },
+                  }}
+                >
                 <Box
                   sx={{
                     minWidth: 88,
@@ -114,7 +120,8 @@ export function NewsPage() {
                     {item.excerpt[lang]}
                   </Typography>
                 </Box>
-              </Paper>
+                </Paper>
+              </Box>
             );
           })}
         </Stack>

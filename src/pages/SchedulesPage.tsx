@@ -26,7 +26,6 @@ import { PageHero } from "../components/layout/PageHero.tsx";
 import { scheduleProgrammes, weekDays } from "../data/schedules.ts";
 import type {
   LessonType,
-  ProgrammeSchedules,
   Season,
   SemesterSchedule,
   WeeklySchedule,
