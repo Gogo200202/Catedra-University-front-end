@@ -190,6 +190,7 @@ const en = {
 
   "teachers.backToList": "Back to all teachers",
   "teachers.notFound": "This teacher profile does not exist or has been removed.",
+  "teachers.exportPdf": "Save as PDF",
   "teachers.section.education": "Education",
   "teachers.section.teaching": "Teaching Activity",
   "teachers.section.competences": "Professional Competences",
@@ -429,6 +430,7 @@ const bg: Dictionary = {
 
   "teachers.backToList": "Обратно към всички преподаватели",
   "teachers.notFound": "Профилът на този преподавател не съществува или е бил премахнат.",
+  "teachers.exportPdf": "Запази като PDF",
   "teachers.section.education": "Образование",
   "teachers.section.teaching": "Преподавателска дейност",
   "teachers.section.competences": "Професионални компетенции",

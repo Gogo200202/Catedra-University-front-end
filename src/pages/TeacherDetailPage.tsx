@@ -1,7 +1,9 @@
+import { useRef } from "react";
 import type { ReactNode } from "react";
 import {
   Avatar,
   Box,
+  Button,
   Chip,
   Container,
   Divider,
@@ -20,6 +22,7 @@ import {
   LocationCity,
   MailOutlined,
   PhoneOutlined,
+  PictureAsPdf,
   Public,
   School,
 } from "@mui/icons-material";
@@ -74,6 +77,7 @@ function BulletList({ items }: { items: string[] }) {
 export function TeacherDetailPage() {
   const { t } = useLanguage();
   const { id } = useParams();
+  const printRef = useRef<HTMLDivElement>(null);
 
   const teacher = teachers.find((entry) => String(entry.id) === id);
   const profile = teacher ? teacherProfiles[teacher.id] : undefined;
@@ -109,8 +113,24 @@ export function TeacherDetailPage() {
   const comp = profile.professionalCompetences;
   const pub = profile.publications;
 
+  const handleExportPdf = async () => {
+    if (!printRef.current) return;
+    const html2pdf = (await import("html2pdf.js")).default;
+    await html2pdf()
+      .set({
+        margin: [8, 8],
+        filename: `teacher-${teacher.id}-profile.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, windowWidth: 1000 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["css", "legacy"] },
+      })
+      .from(printRef.current)
+      .save();
+  };
+
   return (
-    <Box>
+    <Box ref={printRef}>
       <Box
         sx={{
           background: "linear-gradient(135deg, #0d3b66 0%, #1e5f9e 60%, #3f8fd2 100%)",
@@ -118,7 +138,16 @@ export function TeacherDetailPage() {
         }}
       >
         <Container>
-          <Stack direction="row" spacing={2.5} sx={{ alignItems: "center", flexWrap: "wrap" }}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2.5}
+            sx={{
+              alignItems: { xs: "flex-start", md: "center" },
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}
+          >
+            <Stack direction="row" spacing={2.5} sx={{ alignItems: "center", flexWrap: "wrap" }}>
             <Avatar
               sx={{
                 width: 88,
@@ -161,7 +190,18 @@ export function TeacherDetailPage() {
                   </Typography>
                 </Stack>
               </Stack>
-            </Box>
+              </Box>
+            </Stack>
+            <Button
+              data-html2canvas-ignore=""
+              variant="contained"
+              color="secondary"
+              size="small"
+              startIcon={<PictureAsPdf />}
+              onClick={() => void handleExportPdf()}
+            >
+              {t("teachers.exportPdf")}
+            </Button>
           </Stack>
         </Container>
       </Box>
