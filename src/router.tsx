@@ -48,6 +48,11 @@ const SchedulesPage = lazy(() =>
 const ProjectsPage = lazy(() =>
   import("./pages/ProjectsPage.tsx").then((m) => ({ default: m.ProjectsPage })),
 );
+const ProjectDetailPage = lazy(() =>
+  import("./pages/ProjectDetailPage.tsx").then((m) => ({
+    default: m.ProjectDetailPage,
+  })),
+);
 const PublicationsPage = lazy(() =>
   import("./pages/PublicationsPage.tsx").then((m) => ({
     default: m.PublicationsPage,
@@ -114,6 +119,7 @@ export const router = createBrowserRouter([
         },
       },
       { path: "/research/projects", Component: ProjectsPage },
+      { path: "/research/projects/:id", Component: ProjectDetailPage },
       { path: "/research/publications", Component: PublicationsPage },
       { path: "/news", Component: NewsPage },
       { path: "/news/:id", Component: NewsDetailPage },
