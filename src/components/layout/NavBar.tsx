@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   AppBar,
+  Avatar,
   Box,
   Button,
   Container,
@@ -15,10 +16,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { ExpandMore, Menu as MenuIcon } from "@mui/icons-material";
+import { ExpandMore, Menu as MenuIcon, AccountCircle } from "@mui/icons-material";
 import { Link, useLocation } from "react-router";
 import type { TranslationKey } from "../../i18n/translations.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
+import { AuthDialog } from "./AuthDialog.tsx";
+import { useUser } from "../../context/useUser.ts";
 
 interface NavChild {
   labelKey: TranslationKey;
@@ -65,9 +68,12 @@ const navItems: NavItem[] = [
 export function NavBar() {
   const { t } = useLanguage();
   const { pathname } = useLocation();
+  const { user, logout } = useUser();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [accountAnchor, setAccountAnchor] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -86,6 +92,36 @@ export function NavBar() {
     <AppBar position="sticky" elevation={2}>
       <Container>
         <Toolbar disableGutters sx={{ gap: 0.5 }}>
+          {user ? (
+            <IconButton
+              color="inherit"
+              aria-label={user.name}
+              title={user.name}
+              onClick={(event) => setAccountAnchor(event.currentTarget)}
+            >
+              <Avatar
+                src={user.photoUrl ?? undefined}
+                sx={{ width: 36, height: 36, fontSize: 15, bgcolor: "secondary.main" }}
+              >
+                {user.name
+                  .split(" ")
+                  .map((part) => part[0])
+                  .slice(0, 2)
+                  .join("")
+                  .toUpperCase()}
+              </Avatar>
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label={t("header.account")}
+              title={t("header.account")}
+              onClick={() => setAuthOpen(true)}
+              sx={{ mr: 0.5 }}
+            >
+              <AccountCircle sx={{ fontSize: 34 }} />
+            </IconButton>
+          )}
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
@@ -212,6 +248,42 @@ export function NavBar() {
           </List>
         </Box>
       </Drawer>
+
+      <AuthDialog open={authOpen} onClose={() => setAuthOpen(false)} />
+
+      {user && (
+        <Menu
+          anchorEl={accountAnchor}
+          open={Boolean(accountAnchor)}
+          onClose={() => setAccountAnchor(null)}
+          slotProps={{ paper: { sx: { minWidth: 230 } } }}
+        >
+          <Box sx={{ px: 2, py: 1.25 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+              {user.name}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
+              {user.email} · {user.role}
+            </Typography>
+          </Box>
+          <Divider />
+          <MenuItem
+            component={Link}
+            to="/account"
+            onClick={() => setAccountAnchor(null)}
+          >
+            {t("auth.accountDetails")}
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAccountAnchor(null);
+              logout();
+            }}
+          >
+            {t("auth.logout")}
+          </MenuItem>
+        </Menu>
+      )}
     </AppBar>
   );
 }

@@ -5,6 +5,7 @@ import { TopBar } from "./TopBar.tsx";
 import { Header } from "./Header.tsx";
 import { NavBar } from "./NavBar.tsx";
 import { Footer } from "./Footer.tsx";
+import { UserProvider } from "../../context/UserProvider.tsx";
 
 function PageFallback() {
   return (
@@ -22,16 +23,18 @@ export function RootLayout() {
   }, [pathname]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <TopBar />
-      <Header />
-      <NavBar />
-      <Box component="main" sx={{ flexGrow: 1 }}>
-        <Suspense fallback={<PageFallback />}>
-          <Outlet />
-        </Suspense>
+    <UserProvider>
+      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <TopBar />
+        <Header />
+        <NavBar />
+        <Box component="main" sx={{ flexGrow: 1 }}>
+          <Suspense fallback={<PageFallback />}>
+            <Outlet />
+          </Suspense>
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
-    </Box>
+    </UserProvider>
   );
 }

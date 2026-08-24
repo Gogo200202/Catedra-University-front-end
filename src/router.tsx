@@ -105,6 +105,11 @@ const CreateSchedulePage = lazy(() =>
     default: m.CreateSchedulePage,
   })),
 );
+const AccountPage = lazy(() =>
+  import("./pages/mainPages/AccountPage.tsx").then((m) => ({
+    default: m.AccountPage,
+  })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -148,6 +153,7 @@ export const router = createBrowserRouter([
       { path: "/admin/teachers/create", Component: CreateTeacherPage },
       { path: "/admin/events/create", Component: CreateEventPage },
       { path: "/admin/schedules/create", Component: CreateSchedulePage },
+      { path: "/account", Component: AccountPage },
       { path: "*", Component: NotFoundPage },
     ],
   },
