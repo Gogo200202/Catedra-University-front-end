@@ -25,7 +25,7 @@ import {
 } from "../data/curricula.ts";
 import type { CurriculumSemester } from "../data/curricula.ts";
 import type { TranslationKey } from "../i18n/translations.ts";
-import { exportSemesterPdf } from "../utils/exportSemesterPdf.ts";
+import { exportTablePdf } from "../utils/exportTablePdf.ts";
 import { useLanguage } from "../i18n/useLanguage.ts";
 
 interface LevelConfig {
@@ -127,18 +127,21 @@ function SemesterBlock({
   };
 
   const handleExportPdf = () => {
-    void exportSemesterPdf({
-      levelId,
-      semester,
-      lang,
-      docTitle: levelTitle,
-      semesterLabel: t("curricula.semesterLabel"),
-      columns: {
-        course: t("curricula.course"),
-        lectures: t("curricula.lectures"),
-        exercises: t("curricula.exercises"),
-        ects: t("curricula.ects"),
-      },
+    void exportTablePdf({
+      fileName: `${levelId}-semester-${semester.semester}`,
+      docTitle: `${levelTitle} — ${t("curricula.semesterLabel")} ${semester.semester}`,
+      columns: [
+        t("curricula.course"),
+        t("curricula.lectures"),
+        t("curricula.exercises"),
+        t("curricula.ects"),
+      ],
+      rows: semester.courses.map((course) => [
+        course.name[lang],
+        String(course.lecturesPerWeek),
+        String(course.exercisesPerWeek),
+        String(course.ects),
+      ]),
     });
   };
 
