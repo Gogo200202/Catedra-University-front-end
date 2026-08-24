@@ -1,10 +1,10 @@
 import { Box, Chip, Container, Grid, List, ListItem, ListItemIcon, Paper, Stack, Typography } from "@mui/material";
 import { CheckCircle, Verified } from "@mui/icons-material";
-import { PageHero } from "../components/layout/PageHero.tsx";
-import { HeadOfDeptCard } from "../components/shared/HeadOfDeptCard.tsx";
-import { accreditationItems, historyMilestones } from "../data/department.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { PageHero } from "../../components/layout/PageHero.tsx";
+import { HeadOfDeptCard } from "../../components/shared/HeadOfDeptCard.tsx";
+import { accreditationItems, historyMilestones } from "../../data/department.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 const responsibilities: TranslationKey[] = [
   "headOfDept.resp1",

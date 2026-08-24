@@ -1,4 +1,4 @@
-import { ProgrammesLevelPage } from "./ProgrammesLevelPage.tsx";
+import { ProgrammesLevelPage } from "../components/ProgrammesLevelPage.tsx";
 
 export function MasterProgrammesPage() {
   return (

@@ -3,85 +3,85 @@ import { createBrowserRouter } from "react-router";
 import { RootLayout } from "./components/layout/RootLayout.tsx";
 
 const HomePage = lazy(() =>
-  import("./pages/HomePage.tsx").then((m) => ({ default: m.HomePage })),
+  import("./pages/mainPages/HomePage.tsx").then((m) => ({ default: m.HomePage })),
 );
 const AboutPage = lazy(() =>
-  import("./pages/AboutPage.tsx").then((m) => ({ default: m.AboutPage })),
+  import("./pages/mainPages/AboutPage.tsx").then((m) => ({ default: m.AboutPage })),
 );
 const TeachersPage = lazy(() =>
-  import("./pages/TeachersPage.tsx").then((m) => ({ default: m.TeachersPage })),
+  import("./pages/mainPages/TeachersPage.tsx").then((m) => ({ default: m.TeachersPage })),
 );
 const TeacherDetailPage = lazy(() =>
-  import("./pages/TeacherDetailPage.tsx").then((m) => ({
+  import("./pages/detail/TeacherDetailPage.tsx").then((m) => ({
     default: m.TeacherDetailPage,
   })),
 );
 const BachelorProgrammesPage = lazy(() =>
-  import("./pages/BachelorProgrammesPage.tsx").then((m) => ({
+  import("./pages/mainPages/BachelorProgrammesPage.tsx").then((m) => ({
     default: m.BachelorProgrammesPage,
   })),
 );
 const MasterProgrammesPage = lazy(() =>
-  import("./pages/MasterProgrammesPage.tsx").then((m) => ({
+  import("./pages/mainPages/MasterProgrammesPage.tsx").then((m) => ({
     default: m.MasterProgrammesPage,
   })),
 );
 const DoctoralProgrammesPage = lazy(() =>
-  import("./pages/DoctoralProgrammesPage.tsx").then((m) => ({
+  import("./pages/mainPages/DoctoralProgrammesPage.tsx").then((m) => ({
     default: m.DoctoralProgrammesPage,
   })),
 );
 const CurriculaPage = lazy(() =>
-  import("./pages/CurriculaPage.tsx").then((m) => ({ default: m.CurriculaPage })),
+  import("./pages/mainPages/CurriculaPage.tsx").then((m) => ({ default: m.CurriculaPage })),
 );
 const SchedulesPage = lazy(() =>
-  import("./pages/SchedulesPage.tsx").then((m) => ({ default: m.SchedulesPage })),
+  import("./pages/mainPages/SchedulesPage.tsx").then((m) => ({ default: m.SchedulesPage })),
 );
 const ProjectsPage = lazy(() =>
-  import("./pages/ProjectsPage.tsx").then((m) => ({ default: m.ProjectsPage })),
+  import("./pages/mainPages/ProjectsPage.tsx").then((m) => ({ default: m.ProjectsPage })),
 );
 const ProjectDetailPage = lazy(() =>
-  import("./pages/ProjectDetailPage.tsx").then((m) => ({
+  import("./pages/detail/ProjectDetailPage.tsx").then((m) => ({
     default: m.ProjectDetailPage,
   })),
 );
 const PublicationsPage = lazy(() =>
-  import("./pages/PublicationsPage.tsx").then((m) => ({
+  import("./pages/mainPages/PublicationsPage.tsx").then((m) => ({
     default: m.PublicationsPage,
   })),
 );
 const PublicationDetailPage = lazy(() =>
-  import("./pages/PublicationDetailPage.tsx").then((m) => ({
+  import("./pages/detail/PublicationDetailPage.tsx").then((m) => ({
     default: m.PublicationDetailPage,
   })),
 );
 const NewsPage = lazy(() =>
-  import("./pages/NewsPage.tsx").then((m) => ({ default: m.NewsPage })),
+  import("./pages/mainPages/NewsPage.tsx").then((m) => ({ default: m.NewsPage })),
 );
 const NewsDetailPage = lazy(() =>
-  import("./pages/NewsDetailPage.tsx").then((m) => ({
+  import("./pages/detail/NewsDetailPage.tsx").then((m) => ({
     default: m.NewsDetailPage,
   })),
 );
 const ContactsPage = lazy(() =>
-  import("./pages/ContactsPage.tsx").then((m) => ({ default: m.ContactsPage })),
+  import("./pages/mainPages/ContactsPage.tsx").then((m) => ({ default: m.ContactsPage })),
 );
 const NotFoundPage = lazy(() =>
-  import("./pages/NotFoundPage.tsx").then((m) => ({ default: m.NotFoundPage })),
+  import("./pages/mainPages/NotFoundPage.tsx").then((m) => ({ default: m.NotFoundPage })),
 );
 const UmisPage = lazy(() =>
-  import("./pages/UmisPage.tsx").then((m) => ({ default: m.UmisPage })),
+  import("./pages/mainPages/UmisPage.tsx").then((m) => ({ default: m.UmisPage })),
 );
 const EPublishingPage = lazy(() =>
-  import("./pages/EPublishingPage.tsx").then((m) => ({
+  import("./pages/mainPages/EPublishingPage.tsx").then((m) => ({
     default: m.EPublishingPage,
   })),
 );
 const JournalPage = lazy(() =>
-  import("./pages/JournalPage.tsx").then((m) => ({ default: m.JournalPage })),
+  import("./pages/mainPages/JournalPage.tsx").then((m) => ({ default: m.JournalPage })),
 );
 const CareerCentrePage = lazy(() =>
-  import("./pages/CareerCentrePage.tsx").then((m) => ({
+  import("./pages/mainPages/CareerCentrePage.tsx").then((m) => ({
     default: m.CareerCentrePage,
   })),
 );
@@ -97,7 +97,7 @@ export const router = createBrowserRouter([
       {
         path: "/education",
         lazy: async () => {
-          const { EducationIndex } = await import("./pages/Redirects.tsx");
+          const { EducationIndex } = await import("./pages/components/Redirects.tsx");
           return { Component: EducationIndex };
         },
       },
@@ -109,7 +109,7 @@ export const router = createBrowserRouter([
       {
         path: "/research",
         lazy: async () => {
-          const { ResearchIndex } = await import("./pages/Redirects.tsx");
+          const { ResearchIndex } = await import("./pages/components/Redirects.tsx");
           return { Component: ResearchIndex };
         },
       },

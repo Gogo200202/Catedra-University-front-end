@@ -1,6 +1,6 @@
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { Link } from "react-router";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function NotFoundPage() {
   const { t } = useLanguage();

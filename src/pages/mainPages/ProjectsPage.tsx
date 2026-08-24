@@ -1,8 +1,8 @@
 import { Box, Chip, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Link } from "react-router";
-import { PageHero } from "../components/layout/PageHero.tsx";
-import { projects } from "../data/research.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { PageHero } from "../../components/layout/PageHero.tsx";
+import { projects } from "../../data/research.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function ProjectsPage() {
   const { t, lang } = useLanguage();

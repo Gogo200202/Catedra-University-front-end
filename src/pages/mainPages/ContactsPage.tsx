@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import { Email, Phone, Place, Schedule } from "@mui/icons-material";
 import { Map as MapIcon } from "@mui/icons-material";
-import { PageHero } from "../components/layout/PageHero.tsx";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { PageHero } from "../../components/layout/PageHero.tsx";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function ContactsPage() {
   const { t } = useLanguage();

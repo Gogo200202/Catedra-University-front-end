@@ -27,11 +27,11 @@ import {
   School,
 } from "@mui/icons-material";
 import { Link, useParams } from "react-router";
-import { teacherDisplayName, teachers } from "../data/teachers.ts";
-import type { TeacherSummary } from "../data/teachers.ts";
-import { teacherProfiles } from "../data/teacherProfiles.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { teacherDisplayName, teachers } from "../../data/teachers.ts";
+import type { TeacherSummary } from "../../data/teachers.ts";
+import { teacherProfiles } from "../../data/teacherProfiles.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 const positionLabelKey: Record<TeacherSummary["academicPosition"], TranslationKey> = {
   professor: "positions.professor",

@@ -1,10 +1,10 @@
 import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { CheckCircle, OpenInNew } from "@mui/icons-material";
-import { PageHero } from "../components/layout/PageHero.tsx";
-import { systemServices } from "../data/systems.ts";
-import type { SystemId } from "../data/systems.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { PageHero } from "../../components/layout/PageHero.tsx";
+import { systemServices } from "../../data/systems.ts";
+import type { SystemId } from "../../data/systems.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 interface SystemServicePageProps {
   serviceId: SystemId;

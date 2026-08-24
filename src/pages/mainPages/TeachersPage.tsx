@@ -14,12 +14,12 @@ import {
 } from "@mui/material";
 import { MailOutlined, Room } from "@mui/icons-material";
 import { Search as SearchIcon } from "@mui/icons-material";
-import { PageHero } from "../components/layout/PageHero.tsx";
+import { PageHero } from "../../components/layout/PageHero.tsx";
 import { Link } from "react-router";
-import { teacherDisplayName, teachers } from "../data/teachers.ts";
-import type { TeacherSummary } from "../data/teachers.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { teacherDisplayName, teachers } from "../../data/teachers.ts";
+import type { TeacherSummary } from "../../data/teachers.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 type PositionFilter = "all" | TeacherSummary["academicPosition"];
 

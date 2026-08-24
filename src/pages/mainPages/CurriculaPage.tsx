@@ -17,16 +17,16 @@ import {
 } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { Download, Engineering, ExpandMore, PictureAsPdf, School, Science } from "@mui/icons-material";
-import { PageHero } from "../components/layout/PageHero.tsx";
+import { PageHero } from "../../components/layout/PageHero.tsx";
 import {
   kstBachelorCurriculum,
   kstDoctoralCurriculum,
   kstMasterCurriculum,
-} from "../data/curricula.ts";
-import type { CurriculumSemester } from "../data/curricula.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { exportTablePdf } from "../utils/exportTablePdf.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+} from "../../data/curricula.ts";
+import type { CurriculumSemester } from "../../data/curricula.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { exportTablePdf } from "../../utils/exportTablePdf.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 interface LevelConfig {
   id: string;

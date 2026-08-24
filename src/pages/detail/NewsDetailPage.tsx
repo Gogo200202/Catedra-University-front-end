@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { Box, Chip, Container, Divider, Paper, Stack, Typography } from "@mui/material";
 import { ArrowBack, EventOutlined } from "@mui/icons-material";
 import { Link, useParams } from "react-router";
-import { news } from "../data/news.ts";
-import type { NewsCategory } from "../data/news.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { news } from "../../data/news.ts";
+import type { NewsCategory } from "../../data/news.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 const categoryLabelKey: Record<NewsCategory, TranslationKey> = {
   exams: "news.categories.exams",

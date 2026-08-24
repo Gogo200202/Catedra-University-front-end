@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import { PageHero } from "../components/layout/PageHero.tsx";
-import { ProgrammeLevelSection } from "../components/education/ProgrammeLevelSection.tsx";
-import type { ProgrammeLevel } from "../data/programmes.ts";
+import { PageHero } from "../../components/layout/PageHero.tsx";
+import { ProgrammeLevelSection } from "../../components/education/ProgrammeLevelSection.tsx";
+import type { ProgrammeLevel } from "../../data/programmes.ts";
 
 interface ProgrammesPageProps {
   level: ProgrammeLevel;

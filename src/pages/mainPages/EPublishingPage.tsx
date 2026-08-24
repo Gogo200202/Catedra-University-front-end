@@ -1,4 +1,4 @@
-import { SystemServicePage } from "./SystemServicePage.tsx";
+import { SystemServicePage } from "../components/SystemServicePage.tsx";
 
 export function EPublishingPage() {
   return (

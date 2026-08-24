@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { Box, Chip, Container, Divider, Paper, Stack, Typography } from "@mui/material";
 import { ArrowBack, BusinessCenterOutlined } from "@mui/icons-material";
 import { Link, useParams } from "react-router";
-import { projects } from "../data/research.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { projects } from "../../data/research.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function ProjectDetailPage() {
   const { t, lang } = useLanguage();

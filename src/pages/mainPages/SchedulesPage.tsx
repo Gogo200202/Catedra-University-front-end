@@ -22,17 +22,17 @@ import {
   PictureAsPdf,
   Security,
 } from "@mui/icons-material";
-import { PageHero } from "../components/layout/PageHero.tsx";
-import { scheduleProgrammes, weekDays } from "../data/schedules.ts";
+import { PageHero } from "../../components/layout/PageHero.tsx";
+import { scheduleProgrammes, weekDays } from "../../data/schedules.ts";
 import type {
   LessonType,
   Season,
   SemesterSchedule,
   WeeklySchedule,
-} from "../data/schedules.ts";
-import type { TranslationKey } from "../i18n/translations.ts";
-import { exportTablePdf } from "../utils/exportTablePdf.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+} from "../../data/schedules.ts";
+import type { TranslationKey } from "../../i18n/translations.ts";
+import { exportTablePdf } from "../../utils/exportTablePdf.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 const seasonLabelKey: Record<Season, TranslationKey> = {
   winter: "schedules.winter",

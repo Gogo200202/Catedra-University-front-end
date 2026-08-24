@@ -9,10 +9,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { PageHero } from "../components/layout/PageHero.tsx";
+import { PageHero } from "../../components/layout/PageHero.tsx";
 import { Link } from "react-router";
-import { publications } from "../data/research.ts";
-import { useLanguage } from "../i18n/useLanguage.ts";
+import { publications } from "../../data/research.ts";
+import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function PublicationsPage() {
   const { t } = useLanguage();
