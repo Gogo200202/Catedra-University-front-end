@@ -8,19 +8,6 @@ const HomePage = lazy(() =>
 const AboutPage = lazy(() =>
   import("./pages/AboutPage.tsx").then((m) => ({ default: m.AboutPage })),
 );
-const HeadOfDepartmentPage = lazy(() =>
-  import("./pages/HeadOfDepartmentPage.tsx").then((m) => ({
-    default: m.HeadOfDepartmentPage,
-  })),
-);
-const AccreditationPage = lazy(() =>
-  import("./pages/AccreditationPage.tsx").then((m) => ({
-    default: m.AccreditationPage,
-  })),
-);
-const HistoryPage = lazy(() =>
-  import("./pages/HistoryPage.tsx").then((m) => ({ default: m.HistoryPage })),
-);
 const TeachersPage = lazy(() =>
   import("./pages/TeachersPage.tsx").then((m) => ({ default: m.TeachersPage })),
 );
@@ -105,9 +92,6 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", Component: HomePage },
       { path: "/about", Component: AboutPage },
-      { path: "/about/head-of-department", Component: HeadOfDepartmentPage },
-      { path: "/about/accreditation", Component: AccreditationPage },
-      { path: "/about/history", Component: HistoryPage },
       { path: "/teachers", Component: TeachersPage },
       { path: "/teachers/:id", Component: TeacherDetailPage },
       {

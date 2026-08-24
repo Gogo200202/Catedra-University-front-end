@@ -34,17 +34,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { key: "home", labelKey: "nav.home", path: "/" },
-  {
-    key: "about",
-    labelKey: "nav.aboutUs",
-    path: "/about",
-    children: [
-      { labelKey: "aboutUs.department", path: "/about" },
-      { labelKey: "aboutUs.headOfDept", path: "/about/head-of-department" },
-      { labelKey: "aboutUs.accreditation", path: "/about/accreditation" },
-      { labelKey: "aboutUs.history", path: "/about/history" },
-    ],
-  },
   { key: "teachers", labelKey: "nav.teachers", path: "/teachers" },
   {
     key: "education",
@@ -69,6 +58,7 @@ const navItems: NavItem[] = [
   },
   { key: "news", labelKey: "nav.news", path: "/news" },
   { key: "contacts", labelKey: "nav.contacts", path: "/contacts" },
+  { key: "about", labelKey: "nav.aboutUs", path: "/about" },
 ];
 
 export function NavBar() {
