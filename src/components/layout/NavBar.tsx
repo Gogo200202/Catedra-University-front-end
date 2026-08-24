@@ -59,6 +59,7 @@ const navItems: NavItem[] = [
   { key: "news", labelKey: "nav.news", path: "/news" },
   { key: "contacts", labelKey: "nav.contacts", path: "/contacts" },
   { key: "about", labelKey: "nav.aboutUs", path: "/about" },
+  { key: "admin", labelKey: "nav.admin", path: "/admin" },
 ];
 
 export function NavBar() {

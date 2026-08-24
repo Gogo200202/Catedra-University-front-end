@@ -85,6 +85,26 @@ const CareerCentrePage = lazy(() =>
     default: m.CareerCentrePage,
   })),
 );
+const AdminPanelPage = lazy(() =>
+  import("./pages/admin/AdminPanelPage.tsx").then((m) => ({
+    default: m.AdminPanelPage,
+  })),
+);
+const CreateTeacherPage = lazy(() =>
+  import("./pages/admin/CreateTeacherPage.tsx").then((m) => ({
+    default: m.CreateTeacherPage,
+  })),
+);
+const CreateEventPage = lazy(() =>
+  import("./pages/admin/CreateEventPage.tsx").then((m) => ({
+    default: m.CreateEventPage,
+  })),
+);
+const CreateSchedulePage = lazy(() =>
+  import("./pages/admin/CreateSchedulePage.tsx").then((m) => ({
+    default: m.CreateSchedulePage,
+  })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -124,6 +144,10 @@ export const router = createBrowserRouter([
       { path: "/systems/e-publishing", Component: EPublishingPage },
       { path: "/systems/journal", Component: JournalPage },
       { path: "/systems/career", Component: CareerCentrePage },
+      { path: "/admin", Component: AdminPanelPage },
+      { path: "/admin/teachers/create", Component: CreateTeacherPage },
+      { path: "/admin/events/create", Component: CreateEventPage },
+      { path: "/admin/schedules/create", Component: CreateSchedulePage },
       { path: "*", Component: NotFoundPage },
     ],
   },
