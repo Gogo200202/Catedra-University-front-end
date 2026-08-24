@@ -16,6 +16,7 @@ export interface Publication {
   title: string;
   venue: string;
   year: number;
+  content: Record<Lang, string[]>;
 }
 
 export const projects: ResearchProject[] = [
@@ -142,6 +143,18 @@ export const publications: Publication[] = [
       "An adaptive machine learning approach for predictive maintenance in industrial IoT environments",
     venue: "Journal of the Technical University of Gabrovo",
     year: 2025,
+    content: {
+      en: [
+        "The paper presents an adaptive machine learning pipeline for predicting failures of industrial equipment based on vibration, temperature and current signatures collected from low-cost IoT sensors.",
+        "The proposed model combines online feature extraction with a lightweight ensemble classifier that retrains itself as the operating regime of the machine changes. The approach was validated on data from a regional manufacturing partner.",
+        "The results show a reduction of unplanned downtime by over thirty percent compared to calendar-based maintenance, while keeping the computational footprint suitable for edge deployment.",
+      ],
+      bg: [
+        "Статията представя адаптивен конвейер за машинно обучение за прогнозиране на повреди на промишлено оборудване въз основа на вибрационни, температурни и токови сигнатури от евтини IoT сензори.",
+        "Предложеният модел съчетава онлайн извличане на признаци с лек ансамблов класификатор, който се переобучава при смяна на работния режим на машината. Подходът е валидиран с данни от регионален производствен партньор.",
+        "Резултатите показват намаление на непланираните престои с над тридесет процента спрямо поддръжката по календар, при изчислителен отпечатък, подходящ за внедряване на ръба на мрежата.",
+      ],
+    },
   },
   {
     id: 2,
@@ -150,6 +163,18 @@ export const publications: Publication[] = [
       "Microservice-based architecture for scalable university information services",
     venue: "UNITECH Proceedings, Section Computer Informatics",
     year: 2025,
+    content: {
+      en: [
+        "The work describes the migration of legacy monolithic student-information services of a technical university towards a microservice architecture with independent deployment cycles per service.",
+        "A reference decomposition into curriculum, scheduling, examination and communication services is presented together with the API gateway and single sign-on integration with existing university identity systems.",
+        "Load tests during registration periods demonstrate that the new architecture sustains peak loads typical for exam enrollment with significantly lower response times than the legacy system.",
+      ],
+      bg: [
+        "Разработката описва миграцията на остарели монолитни услуги за студентска информация към микросервисна архитектура с независими цикли на внедряване за всяка услуга.",
+        "Представено е еталонно разделяне на услуги за учебни планове, разписания, изпити и комуникация, заедно с API шлюз и интеграция със съществуващите системи за идентификация на университета чрез единен вход.",
+        "Натоварването при тестове през периодите на записване показва, че новата архитектура издържа пиковите натоварвания, типични за записването на изпити, с чувствително по-ниски времена за отговор от старата система.",
+      ],
+    },
   },
   {
     id: 3,
@@ -158,6 +183,18 @@ export const publications: Publication[] = [
       "A comparative study of network intrusion detection methods using deep learning",
     venue: "International Conference on Communications and Cybersecurity",
     year: 2024,
+    content: {
+      en: [
+        "The study compares convolutional, recurrent and attention-based deep learning models for network intrusion detection on two widely used benchmark datasets.",
+        "Special attention is paid to class imbalance handling and to false-alarm rates under realistic traffic mixtures, aspects often neglected when only overall accuracy is reported.",
+        "The comparison leads to practical recommendations for deploying deep-learning based detection in small and medium networks, including model compression results for resource-constrained gateways.",
+      ],
+      bg: [
+        "Изследването сравнява конволюционни, рекурентни и базирани на внимание дълбоки модели за откриване на мрежови нашествия върху два широко използвани референтни набора от данни.",
+        "Специално внимание се отделя на обработката на класов дисбаланс и на процента фалшиви тревоги при реалистични смеси от трафик — аспекти, често пренебрегвани, когато се докладва само обща точност.",
+        "Сравнението води до практически препоръки за внедряване на откриване, базирано на дълбоко обучение, в малки и средни мрежи, включително резултати от компресия на моделите за шлюзове с ограничени ресурси.",
+      ],
+    },
   },
   {
     id: 4,
@@ -166,6 +203,18 @@ export const publications: Publication[] = [
       "Low-cost embedded platform for robotics education in engineering degree courses",
     venue: "Bulletin of the Union of Scientists — Gabrovo",
     year: 2024,
+    content: {
+      en: [
+        "The article presents an open embedded platform built around commodity microcontrollers, designed for laboratory exercises in robotics within bachelor engineering courses.",
+        "The platform covers motor control, sensor fusion and basic navigation tasks. All teaching materials, schematics and firmware examples are published openly for reuse by other departments.",
+        "Three years of classroom use show improved student engagement and a measurable improvement in the practical component of the course assessment compared with the previous commercial kits.",
+      ],
+      bg: [
+        "Статията представя отворена вградена платформа, изградена около масови микроконтролери и проектирана за лабораторни упражнения по роботика в бакалавърските инженерни курсове.",
+        "Платформата обхваща управление на двигатели, сливане на сензорни данни и базови задачи за навигация. Цялите учебни материали, схеми и примери за фърмуер са публикувани открито за повторна употреба от други катедри.",
+        "Три години използване в аудитория показват по-добра ангажираност на студентите и измеримо подобрение в практическата компонента на оценяването в сравнение с предишните търговски комплекти.",
+      ],
+    },
   },
   {
     id: 5,
@@ -174,5 +223,17 @@ export const publications: Publication[] = [
       "Improving first-year programming outcomes through automated assessment tools",
     venue: "Annual University Scientific Session, TU — Gabrovo",
     year: 2023,
+    content: {
+      en: [
+        "The paper analyses three years of first-year programming results after introducing automated assessment with immediate feedback into the introductory programming course.",
+        "The analysis links the usage patterns of the automated system with final exam outcomes and identifies exercise types that benefit most from instant feedback.",
+        "The conclusions inform the current redesign of the course, which combines automated exercises with structured code-review sessions led by teaching assistants.",
+      ],
+      bg: [
+        "Статията анализира три години резултати от първокурсниците по програмиране след въвеждането на автоматично оценяване с незабавна обратна връзка във вводния курс по програмиране.",
+        "Анализът свързва начините на ползване на автоматичната система с резултатите от финалния изпит и определя типовете упражнения, които печелят най-много от мигновената обратна връзка.",
+        "Изводите ориентират текущото преработване на курса, който съчетава автоматични упражнения със структурирани сесии за преглед на код, водени от асистенти.",
+      ],
+    },
   },
 ];

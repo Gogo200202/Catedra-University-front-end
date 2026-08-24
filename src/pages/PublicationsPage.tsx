@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { PageHero } from "../components/layout/PageHero.tsx";
+import { Link } from "react-router";
 import { publications } from "../data/research.ts";
 import { useLanguage } from "../i18n/useLanguage.ts";
 
@@ -57,23 +58,40 @@ export function PublicationsPage() {
                 key={publication.id}
                 divider={index < filtered.length - 1}
                 component="div"
-                sx={{ py: 2.5, px: 3, display: "flex", gap: 2, alignItems: "flex-start" }}
+                sx={{ py: 0, px: 0 }}
               >
-                <Chip
-                  label={publication.year}
-                  size="small"
-                  sx={{ bgcolor: "primary.main", color: "common.white", fontWeight: 700, mt: 0.25 }}
-                />
-                <Box>
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                    {publication.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {publication.authors}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: "text.disabled", fontStyle: "italic" }}>
-                    {publication.venue}
-                  </Typography>
+                <Box
+                  component={Link}
+                  to={`/research/publications/${publication.id}`}
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "flex-start",
+                    width: "100%",
+                    px: 3,
+                    py: 2.5,
+                    textDecoration: "none",
+                    color: "inherit",
+                    transition: "background-color 0.15s ease",
+                    "&:hover": { bgcolor: "action.hover" },
+                  }}
+                >
+                  <Chip
+                    label={publication.year}
+                    size="small"
+                    sx={{ bgcolor: "primary.main", color: "common.white", fontWeight: 700, mt: 0.25 }}
+                  />
+                  <Box>
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                      {publication.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                      {publication.authors}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: "text.disabled", fontStyle: "italic" }}>
+                      {publication.venue}
+                    </Typography>
+                  </Box>
                 </Box>
               </ListItem>
             ))}
