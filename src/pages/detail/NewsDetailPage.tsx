@@ -1,66 +1,101 @@
-import { useMemo } from "react";
-import { Box, Chip, Container, Divider, Paper, Stack, Typography } from "@mui/material";
-import { ArrowBack, EventOutlined } from "@mui/icons-material";
+import { useEffect, useMemo, useState } from "react";
+import { Box, Chip, CircularProgress, Container, Divider, Paper, Stack, Typography } from "@mui/material";
+import { ArrowBack, EventOutlined, PersonOutlined } from "@mui/icons-material";
 import { Link, useParams } from "react-router";
-import { news } from "../../data/news.ts";
-import type { NewsCategory } from "../../data/news.ts";
-import type { TranslationKey } from "../../i18n/translations.ts";
+import { fetchNewsIssue } from "../../api/newsApi.ts";
+import type { NewsArticle, NewsIssue } from "../../api/newsApi.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
-
-const categoryLabelKey: Record<NewsCategory, TranslationKey> = {
-  exams: "news.categories.exams",
-  defences: "news.categories.defences",
-  events: "news.categories.events",
-  lectures: "news.categories.lectures",
-  conference: "news.categories.conference",
-};
 
 export function NewsDetailPage() {
   const { t, lang } = useLanguage();
   const { id } = useParams();
+  const [issue, setIssue] = useState<NewsIssue | null>(null);
+  const [failed, setFailed] = useState(false);
 
-  const item = useMemo(
-    () => news.find((entry) => String(entry.id) === id),
-    [id],
-  );
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    setFailed(false);
+    setIssue(null);
+    fetchNewsIssue(id)
+      .then((data) => {
+        if (!cancelled) setIssue(data);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   const dateLabel = useMemo(() => {
-    if (!item) return "";
+    if (!issue) return "";
     return new Intl.DateTimeFormat(lang === "bg" ? "bg-BG" : "en-GB", {
       day: "numeric",
       month: "long",
       year: "numeric",
-    }).format(new Date(`${item.date}T00:00:00`));
-  }, [item, lang]);
+    }).format(new Date(issue.issueDate));
+  }, [issue, lang]);
 
-  if (!item) {
+  const backLink = (
+    <Box
+      component={Link}
+      to="/news"
+      sx={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 1,
+        color: "secondary.main",
+        fontWeight: 700,
+        textDecoration: "none",
+        "&:hover": { textDecoration: "underline" },
+      }}
+    >
+      <ArrowBack fontSize="small" />
+      {t("news.backToList")}
+    </Box>
+  );
+
+  if (failed) {
     return (
       <Container sx={{ py: 10 }}>
         <Stack spacing={2} sx={{ alignItems: "center", textAlign: "center" }}>
           <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "primary.main" }}>
             {t("news.notFound")}
           </Typography>
-          <Box
-            component={Link}
-            to="/news"
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 1,
-              color: "secondary.main",
-              fontWeight: 700,
-              textDecoration: "none",
-            }}
-          >
-            <ArrowBack fontSize="small" />
-            {t("news.backToList")}
-          </Box>
+          {backLink}
         </Stack>
       </Container>
     );
   }
 
-  const paragraphs = item.content[lang];
+  if (!issue) {
+    return (
+      <Stack sx={{ py: 10, alignItems: "center" }}>
+        <CircularProgress color="primary" />
+      </Stack>
+    );
+  }
+
+  const renderArticle = (article: NewsArticle) => (
+    <>
+      <Typography variant="h6" component="h2" sx={{ color: "primary.main", fontWeight: 700 }}>
+        {article.title[lang]}
+      </Typography>
+      {article.authors.length > 0 && (
+        <Stack direction="row" spacing={0.75} sx={{ alignItems: "center", flexWrap: "wrap" }}>
+          <PersonOutlined sx={{ fontSize: 17, color: "text.secondary" }} />
+          {article.authors.map((author) => (
+            <Chip key={author} label={author} size="small" variant="outlined" />
+          ))}
+        </Stack>
+      )}
+      <Typography variant="body1" sx={{ color: "text.secondary" }}>
+        {article.description[lang]}
+      </Typography>
+    </>
+  );
 
   return (
     <Box>
@@ -72,22 +107,8 @@ export function NewsDetailPage() {
       >
         <Container>
           <Stack spacing={1.5}>
-            <Chip
-              label={t(categoryLabelKey[item.category])}
-              size="small"
-              sx={{
-                alignSelf: "flex-start",
-                bgcolor: "rgba(255,255,255,0.16)",
-                color: "common.white",
-                fontWeight: 700,
-              }}
-            />
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{ color: "common.white", fontWeight: 700 }}
-            >
-              {item.title[lang]}
+            <Typography variant="h4" component="h1" sx={{ color: "common.white", fontWeight: 700 }}>
+              {issue.newspaperName[lang]}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               <EventOutlined sx={{ fontSize: 18, color: "rgba(255,255,255,0.85)" }} />
@@ -101,32 +122,18 @@ export function NewsDetailPage() {
 
       <Container sx={{ py: 5, maxWidth: 820 }}>
         <Paper elevation={1} sx={{ p: { xs: 2.5, md: 4 } }}>
-          <Stack spacing={2}>
-            {paragraphs.map((paragraph) => (
-              <Typography key={paragraph.slice(0, 24)} variant="body1" sx={{ color: "text.secondary" }}>
-                {paragraph}
-              </Typography>
+          <Stack spacing={2.5}>
+            {issue.articles.map((article, index) => (
+              <Box key={`${article.title.en}-${index}`}>
+                {renderArticle(article)}
+                {index < issue.articles.length - 1 && <Divider sx={{ mt: 2.5 }} />}
+              </Box>
             ))}
           </Stack>
 
           <Divider sx={{ my: 3.5 }} />
 
-          <Box
-            component={Link}
-            to="/news"
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 1,
-              color: "secondary.main",
-              fontWeight: 700,
-              textDecoration: "none",
-              "&:hover": { textDecoration: "underline" },
-            }}
-          >
-            <ArrowBack fontSize="small" />
-            {t("news.backToList")}
-          </Box>
+          {backLink}
         </Paper>
       </Container>
     </Box>
