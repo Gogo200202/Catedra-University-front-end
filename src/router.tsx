@@ -110,6 +110,11 @@ const AccountPage = lazy(() =>
     default: m.AccountPage,
   })),
 );
+const ProgrammeDetailPage = lazy(() =>
+  import("./pages/detail/ProgrammeDetailPage.tsx").then((m) => ({
+    default: m.ProgrammeDetailPage,
+  })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -129,6 +134,9 @@ export const router = createBrowserRouter([
       { path: "/education/bachelor", Component: BachelorProgrammesPage },
       { path: "/education/master", Component: MasterProgrammesPage },
       { path: "/education/doctoral", Component: DoctoralProgrammesPage },
+      { path: "/education/bachelor/:id", Component: ProgrammeDetailPage },
+      { path: "/education/master/:id", Component: ProgrammeDetailPage },
+      { path: "/education/doctoral/:id", Component: ProgrammeDetailPage },
       { path: "/education/curricula", Component: CurriculaPage },
       { path: "/education/schedules", Component: SchedulesPage },
       {

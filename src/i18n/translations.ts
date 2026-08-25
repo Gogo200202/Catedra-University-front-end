@@ -177,6 +177,13 @@ const en = {
   "teachers.foundLabel": "teacher(s) found",
 
   "education.semestersLabel": "semesters",
+  "education.degreeLabel": "Degree",
+  "education.formLabel": "Form of study",
+  "education.highlightsTitle": "What you will study",
+  "education.overviewTitle": "Overview",
+  "education.careersTitle": "Career opportunities",
+  "education.backToProgrammes": "Back to programmes",
+  "education.notFound": "This degree course does not exist or has been removed.",
   "education.curriculaTitle": "Curricula and schedules",
   "education.curriculaText":
     "Current curricula for all degree courses, weekly schedules and exam sessions are maintained in the department information system. Students can export their personal programme in PDF format.",
@@ -465,6 +472,13 @@ const bg: Dictionary = {
   "teachers.foundLabel": "намерени преподаватели",
 
   "education.semestersLabel": "семестъра",
+  "education.degreeLabel": "Степен",
+  "education.formLabel": "Форма на обучение",
+  "education.highlightsTitle": "Какво ще учите",
+  "education.overviewTitle": "Обобщение",
+  "education.careersTitle": "Кариерни възможности",
+  "education.backToProgrammes": "Обратно към специалностите",
+  "education.notFound": "Тази специалност не съществува или е била премахната.",
   "education.curriculaTitle": "Учебни планове и графици",
   "education.curriculaText":
     "Актуалните учебни планове по всички специалности, седмичните графици и изпитните сесии се поддържат в информационната система на катедрата. Студентите могат да експортират личната си програма в PDF формат.",

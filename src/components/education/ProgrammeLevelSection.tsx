@@ -1,4 +1,5 @@
 import { Box, Chip, Paper, Typography } from "@mui/material";
+import { Link } from "react-router";
 import { programmes } from "../../data/programmes.ts";
 import type { ProgrammeLevel } from "../../data/programmes.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
@@ -23,10 +24,14 @@ export function ProgrammeLevelSection({ level }: { level: ProgrammeLevel }) {
           <Paper
             key={programme.id}
             elevation={2}
+            component={Link}
+            to={`/education/${level === "phd" ? "doctoral" : level}/${programme.id}`}
             sx={{
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
+              textDecoration: "none",
+              cursor: "pointer",
               transition: "transform 0.2s ease, box-shadow 0.2s ease",
               "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
             }}
