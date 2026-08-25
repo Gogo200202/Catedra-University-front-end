@@ -2,7 +2,10 @@ import { createContext } from "react";
 
 export type UserRole = "admin" | "teacher" | "student";
 
+export const DEFAULT_PHOTO_URL = "no photo implemented for now";
+
 export interface User {
+  id: string;
   name: string;
   email: string;
   photoUrl: string | null;

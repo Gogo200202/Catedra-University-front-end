@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Alert, Box, Chip, Container, TextField } from "@mui/material";
+import { Alert, Box, Container, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { PageHero } from "../../components/layout/PageHero.tsx";
 import { AdminFormShell } from "../components/AdminFormShell.tsx";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 import { useUser } from "../../context/useUser.ts";
+import { DEFAULT_PHOTO_URL } from "../../context/UserContext.ts";
 
 interface AccountFormValues {
   name: string;
@@ -18,7 +19,7 @@ export function AccountPage() {
   const [saved, setSaved] = useState(false);
   const { register, handleSubmit } = useForm<AccountFormValues>({
     values: user
-      ? { name: user.name, email: user.email, photoUrl: user.photoUrl ?? "" }
+      ? { name: user.name, email: user.email, photoUrl: user.photoUrl ?? DEFAULT_PHOTO_URL }
       : undefined,
   });
 
@@ -44,7 +45,7 @@ export function AccountPage() {
         updateUser({
           name: values.name,
           email: values.email,
-          photoUrl: values.photoUrl.trim() || null,
+          photoUrl: values.photoUrl.trim() || DEFAULT_PHOTO_URL,
         });
         setSaved(true);
       })}
@@ -68,9 +69,12 @@ export function AccountPage() {
         {...register("email", { required: true })}
       />
       <TextField label={t("account.photoUrl")} fullWidth {...register("photoUrl")} />
-      <Chip
-        label={`${t("account.role")}: ${user.role}`}
-        sx={{ alignSelf: "flex-start", bgcolor: "primary.main", color: "common.white" }}
+      <TextField
+        label={t("account.userId")}
+        value={user.id}
+        fullWidth
+        slotProps={{ input: { readOnly: true } }}
+        helperText={`${t("account.role")}: ${user.role}`}
       />
     </AdminFormShell>
   );
