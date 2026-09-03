@@ -3,15 +3,17 @@ import type { ReactNode } from "react";
 import { UserContext } from "./UserContext.ts";
 import type { User } from "./UserContext.ts";
 import { DEFAULT_PHOTO_URL } from "./UserContext.ts";
+import { loginUser, registerUser, fetchCurrentUser } from "../api/authApi.ts";
 
 const FIELD_PREFIX = "cst.user.";
-const USER_FIELDS = ["id", "name", "email", "photoUrl", "role"] as const;
+const USER_FIELDS = ["id", "name", "email", "photoUrl", "role", "jwt"] as const;
 
 function loadStoredUser(): User | null {
   try {
     const id = localStorage.getItem(`${FIELD_PREFIX}id`);
     const email = localStorage.getItem(`${FIELD_PREFIX}email`);
-    if (!id || !email) return null;
+    const jwt = localStorage.getItem(`${FIELD_PREFIX}jwt`);
+    if (!id || !email || !jwt) return null;
     const rawRole = localStorage.getItem(`${FIELD_PREFIX}role`);
     return {
       id,
@@ -22,14 +24,42 @@ function loadStoredUser(): User | null {
         rawRole === "admin" || rawRole === "teacher" || rawRole === "student"
           ? rawRole
           : "student",
+      jwt,
     };
   } catch {
     return null;
   }
 }
 
+function toUser(res: { id: string; name: string; email: string; photoUrl: string | null; role: User["role"]; jwt: string }): User {
+  return {
+    id: res.id,
+    name: res.name,
+    email: res.email,
+    photoUrl: res.photoUrl ?? DEFAULT_PHOTO_URL,
+    role: res.role,
+    jwt: res.jwt,
+  };
+}
+
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(loadStoredUser);
+
+  useEffect(() => {
+    const jwt = user?.jwt;
+    if (!jwt) return;
+    let cancelled = false;
+    fetchCurrentUser(jwt)
+      .then((res) => {
+        if (!cancelled) setUser(toUser(res));
+      })
+      .catch(() => {
+        if (!cancelled) setUser(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     try {
@@ -37,12 +67,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
         localStorage.setItem(`${FIELD_PREFIX}id`, user.id);
         localStorage.setItem(`${FIELD_PREFIX}name`, user.name);
         localStorage.setItem(`${FIELD_PREFIX}email`, user.email);
-        if (user.photoUrl) {
+        if (user.photoUrl && user.photoUrl !== DEFAULT_PHOTO_URL) {
           localStorage.setItem(`${FIELD_PREFIX}photoUrl`, user.photoUrl);
         } else {
           localStorage.removeItem(`${FIELD_PREFIX}photoUrl`);
         }
         localStorage.setItem(`${FIELD_PREFIX}role`, user.role);
+        localStorage.setItem(`${FIELD_PREFIX}jwt`, user.jwt);
       } else {
         USER_FIELDS.forEach((field) =>
           localStorage.removeItem(`${FIELD_PREFIX}${field}`),
@@ -53,24 +84,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   }, [user]);
 
-  const login = useCallback((email: string) => {
-    setUser({
-      id: crypto.randomUUID(),
-      name: email.split("@")[0],
-      email,
-      photoUrl: DEFAULT_PHOTO_URL,
-      role: "student",
-    });
+  const login = useCallback(async (email: string, password: string) => {
+    const res = await loginUser(email, password);
+    setUser(toUser(res));
   }, []);
 
-  const register = useCallback((name: string, email: string) => {
-    setUser({
-      id: crypto.randomUUID(),
-      name,
-      email,
-      photoUrl: DEFAULT_PHOTO_URL,
-      role: "student",
-    });
+  const register = useCallback(async (name: string, email: string, password: string) => {
+    const res = await registerUser(name, email, password);
+    setUser(toUser(res));
   }, []);
 
   const updateUser = useCallback((updates: Partial<User>) => {
@@ -80,8 +101,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setUser(null);
     try {
-      sessionStorage.clear();
-      localStorage.clear();
+      USER_FIELDS.forEach((field) =>
+        localStorage.removeItem(`${FIELD_PREFIX}${field}`),
+      );
     } catch {
       /* storage unavailable */
     }

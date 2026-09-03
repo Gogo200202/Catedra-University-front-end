@@ -10,12 +10,13 @@ export interface User {
   email: string;
   photoUrl: string | null;
   role: UserRole;
+  jwt: string;
 }
 
 export interface UserContextValue {
   user: User | null;
-  login: (email: string) => void;
-  register: (name: string, email: string) => void;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   updateUser: (updates: Partial<User>) => void;
   logout: () => void;
 }

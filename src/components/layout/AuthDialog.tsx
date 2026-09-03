@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Alert,
   Button,
   Dialog,
   DialogContent,
@@ -7,7 +8,6 @@ import {
   Tab,
   Tabs,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import type { TranslationKey } from "../../i18n/translations.ts";
@@ -34,6 +34,8 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
   const { t } = useLanguage();
   const { login, register: registerUser } = useUser();
   const [tab, setTab] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const loginForm = useForm<LoginValues>({
     defaultValues: { email: "", password: "" },
@@ -45,6 +47,8 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
   const handleClose = () => {
     onClose();
     setTab(0);
+    setError(null);
+    setLoading(false);
     loginForm.reset();
     registerForm.reset();
   };
@@ -56,7 +60,10 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
       <DialogContent sx={{ pt: 3 }}>
         <Tabs
           value={tab}
-          onChange={(_, value: number) => setTab(value)}
+          onChange={(_, value: number) => {
+            setTab(value);
+            setError(null);
+          }}
           variant="fullWidth"
           sx={{ mb: 3 }}
         >
@@ -64,14 +71,28 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
           <Tab label={t("auth.register")} />
         </Tabs>
 
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
         {tab === 0 ? (
           <Stack
             component="form"
             spacing={2.5}
             noValidate
-            onSubmit={loginForm.handleSubmit((values) => {
-              login(values.email);
-              handleClose();
+            onSubmit={loginForm.handleSubmit(async (values) => {
+              setError(null);
+              setLoading(true);
+              try {
+                await login(values.email, values.password);
+                handleClose();
+              } catch {
+                setError(t("auth.loginError"));
+              } finally {
+                setLoading(false);
+              }
             })}
           >
             <TextField
@@ -89,7 +110,13 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
               autoComplete="current-password"
               {...loginForm.register("password", { required: true })}
             />
-            <Button type="submit" variant="contained" color="primary" size="large">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              disabled={loading}
+            >
               {t("auth.login")}
             </Button>
           </Stack>
@@ -98,9 +125,17 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
             component="form"
             spacing={2.5}
             noValidate
-            onSubmit={registerForm.handleSubmit((values) => {
-              registerUser(values.fullName, values.email);
-              handleClose();
+            onSubmit={registerForm.handleSubmit(async (values) => {
+              setError(null);
+              setLoading(true);
+              try {
+                await registerUser(values.fullName, values.email, values.password);
+                handleClose();
+              } catch {
+                setError(t("auth.registerError"));
+              } finally {
+                setLoading(false);
+              }
             })}
           >
             <TextField
@@ -124,18 +159,17 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
               autoComplete="new-password"
               {...registerForm.register("password", { required: true })}
             />
-            <Button type="submit" variant="contained" color="secondary" size="large">
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              size="large"
+              disabled={loading}
+            >
               {t("auth.register")}
             </Button>
           </Stack>
         )}
-
-        <Typography
-          variant="caption"
-          sx={{ display: "block", mt: 2.5, color: "text.secondary", textAlign: "center" }}
-        >
-          {t("auth.demoNote")}
-        </Typography>
       </DialogContent>
     </Dialog>
   );

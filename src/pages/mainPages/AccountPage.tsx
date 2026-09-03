@@ -6,20 +6,29 @@ import { AdminFormShell } from "../components/AdminFormShell.tsx";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 import { useUser } from "../../context/useUser.ts";
 import { DEFAULT_PHOTO_URL } from "../../context/UserContext.ts";
+import { updateCurrentUser } from "../../api/authApi.ts";
 
 interface AccountFormValues {
   name: string;
   email: string;
   photoUrl: string;
+  password: string;
 }
 
 export function AccountPage() {
   const { t } = useLanguage();
   const { user, updateUser } = useUser();
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const { register, handleSubmit } = useForm<AccountFormValues>({
     values: user
-      ? { name: user.name, email: user.email, photoUrl: user.photoUrl ?? DEFAULT_PHOTO_URL }
+      ? {
+          name: user.name,
+          email: user.email,
+          photoUrl: user.photoUrl ?? "",
+          password: "",
+        }
       : undefined,
   });
 
@@ -41,18 +50,40 @@ export function AccountPage() {
       titleKey="auth.accountDetails"
       subtitleKey="account.pageSubtitle"
       submitLabel={t("account.save")}
-      onSubmit={handleSubmit((values) => {
-        updateUser({
-          name: values.name,
-          email: values.email,
-          photoUrl: values.photoUrl.trim() || DEFAULT_PHOTO_URL,
-        });
-        setSaved(true);
+      onSubmit={handleSubmit(async (values) => {
+        setError(null);
+        setSaved(false);
+        try {
+          const payload: { name: string; email: string; photoUrl?: string; password?: string } = {
+            name: values.name,
+            email: values.email,
+          };
+          if (values.photoUrl.trim()) {
+            payload.photoUrl = values.photoUrl.trim();
+          }
+          if (values.password) {
+            payload.password = values.password;
+          }
+          const res = await updateCurrentUser(user.jwt, payload);
+          updateUser({
+            name: res.name,
+            email: res.email,
+            photoUrl: res.photoUrl ?? DEFAULT_PHOTO_URL,
+          });
+          setSaved(true);
+        } catch {
+          setError(t("account.updateError"));
+        }
       })}
     >
       {saved && (
         <Alert severity="success" onClose={() => setSaved(false)}>
           {t("account.saved")}
+        </Alert>
+      )}
+      {error && (
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
         </Alert>
       )}
       <TextField
@@ -70,11 +101,12 @@ export function AccountPage() {
       />
       <TextField label={t("account.photoUrl")} fullWidth {...register("photoUrl")} />
       <TextField
-        label={t("account.userId")}
-        value={user.id}
+        label={t("account.newPassword")}
+        type="password"
         fullWidth
-        slotProps={{ input: { readOnly: true } }}
-        helperText={`${t("account.role")}: ${user.role}`}
+        autoComplete="new-password"
+        helperText={t("account.passwordHint")}
+        {...register("password")}
       />
     </AdminFormShell>
   );
