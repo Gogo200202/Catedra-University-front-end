@@ -46,3 +46,31 @@ export async function fetchNewsIssue(id: string): Promise<NewsIssue> {
   const { data } = await api.get<NewsIssue>(`/news/${id}`);
   return data;
 }
+
+export async function createNewsIssue(
+  token: string,
+  payload: Partial<NewsIssue>,
+): Promise<NewsIssue> {
+  const { data } = await api.post<NewsIssue>("/news", payload, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+}
+
+export async function updateNewsIssue(
+  token: string,
+  id: string,
+  payload: Partial<NewsIssue>,
+): Promise<NewsIssue> {
+  const { data } = await api.put<NewsIssue>(`/news/${id}`, payload, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+}
+
+export async function deleteNewsIssue(token: string, id: string): Promise<{ message: string }> {
+  const { data } = await api.delete<{ message: string }>(`/news/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+}

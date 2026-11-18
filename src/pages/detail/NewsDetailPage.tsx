@@ -1,16 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Chip, CircularProgress, Container, Divider, Paper, Stack, Typography } from "@mui/material";
-import { ArrowBack, EventOutlined, PersonOutlined } from "@mui/icons-material";
-import { Link, useParams } from "react-router";
-import { fetchNewsIssue } from "../../api/newsApi.ts";
+import { Box, Button, Chip, CircularProgress, Container, Divider, Paper, Stack, Typography } from "@mui/material";
+import { ArrowBack, DeleteOutlined, EditOutlined, EventOutlined, PersonOutlined } from "@mui/icons-material";
+import { Link, useNavigate, useParams } from "react-router";
+import { deleteNewsIssue, fetchNewsIssue } from "../../api/newsApi.ts";
 import type { NewsArticle, NewsIssue } from "../../api/newsApi.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
+import { useUser } from "../../context/useUser.ts";
 
 export function NewsDetailPage() {
   const { t, lang } = useLanguage();
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useUser();
   const [issue, setIssue] = useState<NewsIssue | null>(null);
   const [failed, setFailed] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -116,6 +120,37 @@ export function NewsDetailPage() {
                 {dateLabel}
               </Typography>
             </Stack>
+            {user?.jwt && (
+              <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+                <Button
+                  variant="contained"
+                  startIcon={<EditOutlined />}
+                  onClick={() => navigate(`/admin/events/edit/${id}`)}
+                  sx={{ bgcolor: "rgba(255,255,255,0.2)", "&:hover": { bgcolor: "rgba(255,255,255,0.3)" } }}
+                >
+                  {t("admin.editEvent")}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteOutlined />}
+                  disabled={deleting}
+                  onClick={async () => {
+                    if (!id || !user.jwt) return;
+                    if (!window.confirm(t("news.backToList"))) return;
+                    setDeleting(true);
+                    try {
+                      await deleteNewsIssue(user.jwt, id);
+                      navigate("/news");
+                    } catch {
+                      setDeleting(false);
+                    }
+                  }}
+                >
+                  {t("admin.deleteEvent")}
+                </Button>
+              </Stack>
+            )}
           </Stack>
         </Container>
       </Box>

@@ -100,6 +100,11 @@ const CreateEventPage = lazy(() =>
     default: m.CreateEventPage,
   })),
 );
+const EditEventPage = lazy(() =>
+  import("./pages/admin/EditEventPage.tsx").then((m) => ({
+    default: m.EditEventPage,
+  })),
+);
 const CreateSchedulePage = lazy(() =>
   import("./pages/admin/CreateSchedulePage.tsx").then((m) => ({
     default: m.CreateSchedulePage,
@@ -160,6 +165,7 @@ export const router = createBrowserRouter([
       { path: "/admin", Component: AdminPanelPage },
       { path: "/admin/teachers/create", Component: CreateTeacherPage },
       { path: "/admin/events/create", Component: CreateEventPage },
+      { path: "/admin/events/edit/:id", Component: EditEventPage },
       { path: "/admin/schedules/create", Component: CreateSchedulePage },
       { path: "/account", Component: AccountPage },
       { path: "*", Component: NotFoundPage },
