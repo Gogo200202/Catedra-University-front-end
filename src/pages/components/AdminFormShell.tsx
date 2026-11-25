@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { FormEventHandler, ReactNode } from "react";
 import { Box, Button, Container, Paper, Stack } from "@mui/material";
 import { PageHero } from "../../components/layout/PageHero.tsx";
 import type { TranslationKey } from "../../i18n/translations.ts";
@@ -7,7 +7,8 @@ interface AdminFormShellProps {
   titleKey: TranslationKey;
   subtitleKey: TranslationKey;
   submitLabel: string;
-  onSubmit: () => void;
+  onSubmit: FormEventHandler<HTMLFormElement>;
+  submitDisabled?: boolean;
   children: ReactNode;
 }
 
@@ -16,6 +17,7 @@ export function AdminFormShell({
   subtitleKey,
   submitLabel,
   onSubmit,
+  submitDisabled = false,
   children,
 }: AdminFormShellProps) {
   return (
@@ -33,6 +35,7 @@ export function AdminFormShell({
             {children}
             <Button
               type="submit"
+              disabled={submitDisabled}
               variant="contained"
               color="secondary"
               size="large"
