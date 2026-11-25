@@ -1,20 +1,53 @@
-import { useMemo } from "react";
-import { Box, Chip, Container, Divider, Paper, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Chip, CircularProgress, Container, Divider, Link as MuiLink, Paper, Stack, Typography } from "@mui/material";
 import { ArrowBack, MenuBookOutlined } from "@mui/icons-material";
 import { Link, useParams } from "react-router";
-import { publications } from "../../data/research.ts";
+import { fetchPublication } from "../../api/researchApi.ts";
+import type { Publication } from "../../api/researchApi.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function PublicationDetailPage() {
   const { t, lang } = useLanguage();
   const { id } = useParams();
+  const [publication, setPublication] = useState<Publication | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
 
-  const publication = useMemo(
-    () => publications.find((entry) => String(entry.id) === id),
-    [id],
-  );
+  useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      setFailed(true);
+      return;
+    }
 
-  if (!publication) {
+    let cancelled = false;
+    setLoading(true);
+    setFailed(false);
+    setPublication(null);
+    fetchPublication(id)
+      .then((data) => {
+        if (!cancelled) setPublication(data);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <Stack sx={{ py: 10, alignItems: "center" }}>
+        <CircularProgress color="primary" />
+      </Stack>
+    );
+  }
+
+  if (failed || !publication) {
     return (
       <Container sx={{ py: 10 }}>
         <Stack spacing={2} sx={{ alignItems: "center", textAlign: "center" }}>
@@ -41,6 +74,14 @@ export function PublicationDetailPage() {
     );
   }
 
+  const paragraphs = publication.content?.[lang] ?? [];
+  const publicationDetails = [
+    publication.publicationType,
+    publication.volume && `${t("research.volume")} ${publication.volume}`,
+    publication.issue && `${t("research.issue")} ${publication.issue}`,
+    publication.pages && `${t("research.pages")} ${publication.pages}`,
+  ].filter(Boolean);
+
   return (
     <Box>
       <Box
@@ -56,15 +97,11 @@ export function PublicationDetailPage() {
               size="small"
               sx={{ alignSelf: "flex-start", bgcolor: "rgba(255,255,255,0.16)", color: "common.white", fontWeight: 700 }}
             />
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{ color: "common.white", fontWeight: 700 }}
-            >
+            <Typography variant="h4" component="h1" sx={{ color: "common.white", fontWeight: 700 }}>
               {publication.title}
             </Typography>
             <Typography variant="subtitle2" sx={{ color: "rgba(255,255,255,0.92)" }}>
-              {publication.authors}
+              {publication.authors.join(", ")}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
               <MenuBookOutlined sx={{ fontSize: 18, color: "rgba(255,255,255,0.85)" }} />
@@ -79,11 +116,35 @@ export function PublicationDetailPage() {
       <Container sx={{ py: 5, maxWidth: 820 }}>
         <Paper elevation={1} sx={{ p: { xs: 2.5, md: 4 } }}>
           <Stack spacing={2}>
-            {publication.content[lang].map((paragraph) => (
-              <Typography key={paragraph.slice(0, 24)} variant="body1" sx={{ color: "text.secondary" }}>
+            {publicationDetails.length > 0 && (
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {publicationDetails.join(" · ")}
+              </Typography>
+            )}
+            {paragraphs.map((paragraph, index) => (
+              <Typography key={`${index}-${paragraph.slice(0, 24)}`} variant="body1" sx={{ color: "text.secondary" }}>
                 {paragraph}
               </Typography>
             ))}
+            {publication.doi && (
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {t("research.doi")}: {publication.doi}
+              </Typography>
+            )}
+            {(publication.url || publication.pdfFile) && (
+              <Stack direction="row" spacing={2}>
+                {publication.url && (
+                  <MuiLink href={publication.url} target="_blank" rel="noreferrer">
+                    {t("research.openUrl")}
+                  </MuiLink>
+                )}
+                {publication.pdfFile && (
+                  <MuiLink href={publication.pdfFile} target="_blank" rel="noreferrer">
+                    {t("research.pdf")}
+                  </MuiLink>
+                )}
+              </Stack>
+            )}
           </Stack>
 
           <Divider sx={{ my: 3.5 }} />

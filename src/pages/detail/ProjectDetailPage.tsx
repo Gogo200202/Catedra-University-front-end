@@ -1,20 +1,53 @@
-import { useMemo } from "react";
-import { Box, Chip, Container, Divider, Paper, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Chip, CircularProgress, Container, Divider, Paper, Stack, Typography } from "@mui/material";
 import { ArrowBack, BusinessCenterOutlined } from "@mui/icons-material";
 import { Link, useParams } from "react-router";
-import { projects } from "../../data/research.ts";
+import { fetchResearchProject } from "../../api/researchApi.ts";
+import type { ResearchProject } from "../../api/researchApi.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 
 export function ProjectDetailPage() {
   const { t, lang } = useLanguage();
   const { id } = useParams();
+  const [project, setProject] = useState<ResearchProject | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
 
-  const project = useMemo(
-    () => projects.find((entry) => String(entry.id) === id),
-    [id],
-  );
+  useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      setFailed(true);
+      return;
+    }
 
-  if (!project) {
+    let cancelled = false;
+    setLoading(true);
+    setFailed(false);
+    setProject(null);
+    fetchResearchProject(id)
+      .then((data) => {
+        if (!cancelled) setProject(data);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <Stack sx={{ py: 10, alignItems: "center" }}>
+        <CircularProgress color="primary" />
+      </Stack>
+    );
+  }
+
+  if (failed || !project) {
     return (
       <Container sx={{ py: 10 }}>
         <Stack spacing={2} sx={{ alignItems: "center", textAlign: "center" }}>
@@ -41,7 +74,7 @@ export function ProjectDetailPage() {
     );
   }
 
-  const paragraphs = project.content[lang];
+  const paragraphs = project.content?.[lang] ?? [];
 
   return (
     <Box>
@@ -67,11 +100,7 @@ export function ProjectDetailPage() {
                 />
               )}
             </Stack>
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{ color: "common.white", fontWeight: 700 }}
-            >
+            <Typography variant="h4" component="h1" sx={{ color: "common.white", fontWeight: 700 }}>
               {project.name[lang]}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
@@ -87,8 +116,8 @@ export function ProjectDetailPage() {
       <Container sx={{ py: 5, maxWidth: 820 }}>
         <Paper elevation={1} sx={{ p: { xs: 2.5, md: 4 } }}>
           <Stack spacing={2}>
-            {paragraphs.map((paragraph) => (
-              <Typography key={paragraph.slice(0, 24)} variant="body1" sx={{ color: "text.secondary" }}>
+            {paragraphs.map((paragraph, index) => (
+              <Typography key={`${index}-${paragraph.slice(0, 24)}`} variant="body1" sx={{ color: "text.secondary" }}>
                 {paragraph}
               </Typography>
             ))}
