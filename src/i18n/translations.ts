@@ -231,6 +231,10 @@ const en = {
   "teachers.foundLabel": "teacher(s) found",
 
   "education.semestersLabel": "semesters",
+  "education.classesLabel": "classes",
+  "education.loadError": "Education data could not be loaded. Please try again later.",
+  "education.noData": "No degree programmes are available for this level.",
+  "education.allPrograms": "All education programmes",
   "education.degreeLabel": "Degree",
   "education.formLabel": "Form of study",
   "education.highlightsTitle": "What you will study",
@@ -610,6 +614,10 @@ const bg: Dictionary = {
   "teachers.foundLabel": "намерени преподаватели",
 
   "education.semestersLabel": "семестъра",
+  "education.classesLabel": "дисциплини",
+  "education.loadError": "Данните за обучението не могат да бъдат заредени. Моля, опитайте отново.",
+  "education.noData": "Няма налични специалности за тази степен.",
+  "education.allPrograms": "Всички образователни програми",
   "education.degreeLabel": "Степен",
   "education.formLabel": "Форма на обучение",
   "education.highlightsTitle": "Какво ще учите",

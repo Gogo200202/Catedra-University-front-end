@@ -16,19 +16,14 @@ const TeacherDetailPage = lazy(() =>
     default: m.TeacherDetailPage,
   })),
 );
-const BachelorProgrammesPage = lazy(() =>
-  import("./pages/mainPages/BachelorProgrammesPage.tsx").then((m) => ({
-    default: m.BachelorProgrammesPage,
+const EducationPage = lazy(() =>
+  import("./pages/mainPages/EducationPage.tsx").then((m) => ({
+    default: m.EducationPage,
   })),
 );
-const MasterProgrammesPage = lazy(() =>
-  import("./pages/mainPages/MasterProgrammesPage.tsx").then((m) => ({
-    default: m.MasterProgrammesPage,
-  })),
-);
-const DoctoralProgrammesPage = lazy(() =>
-  import("./pages/mainPages/DoctoralProgrammesPage.tsx").then((m) => ({
-    default: m.DoctoralProgrammesPage,
+const EducationDegreeDetailPage = lazy(() =>
+  import("./pages/detail/EducationDegreeDetailPage.tsx").then((m) => ({
+    default: m.EducationDegreeDetailPage,
   })),
 );
 const CurriculaPage = lazy(() =>
@@ -125,12 +120,6 @@ const AccountPage = lazy(() =>
     default: m.AccountPage,
   })),
 );
-const ProgrammeDetailPage = lazy(() =>
-  import("./pages/detail/ProgrammeDetailPage.tsx").then((m) => ({
-    default: m.ProgrammeDetailPage,
-  })),
-);
-
 export const router = createBrowserRouter([
   {
     Component: RootLayout,
@@ -146,12 +135,8 @@ export const router = createBrowserRouter([
           return { Component: EducationIndex };
         },
       },
-      { path: "/education/bachelor", Component: BachelorProgrammesPage },
-      { path: "/education/master", Component: MasterProgrammesPage },
-      { path: "/education/doctoral", Component: DoctoralProgrammesPage },
-      { path: "/education/bachelor/:id", Component: ProgrammeDetailPage },
-      { path: "/education/master/:id", Component: ProgrammeDetailPage },
-      { path: "/education/doctoral/:id", Component: ProgrammeDetailPage },
+      { path: "/education/:level", Component: EducationPage },
+      { path: "/education/:level/:id", Component: EducationDegreeDetailPage },
       { path: "/education/curricula", Component: CurriculaPage },
       { path: "/education/schedules", Component: SchedulesPage },
       {
