@@ -7,6 +7,7 @@ import { useLanguage } from "../../i18n/useLanguage.ts";
 import { useUser } from "../../context/useUser.ts";
 import { DEFAULT_PHOTO_URL } from "../../context/UserContext.ts";
 import { updateCurrentUser } from "../../api/authApi.ts";
+import { ProfessorFormPage } from "../admin/ProfessorFormPage.tsx";
 
 interface AccountFormValues {
   name: string;
@@ -40,6 +41,22 @@ export function AccountPage() {
           <Alert severity="warning" sx={{ maxWidth: 720, mx: "auto" }}>
             {t("account.loginRequired")}
           </Alert>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (user.role === "teacher") {
+    return (
+      <Box>
+        <PageHero titleKey="auth.accountDetails" subtitleKey="account.pageSubtitle" />
+        <Container sx={{ py: 6 }}>
+          <ProfessorFormPage
+            mode="edit"
+            embedded
+            professorId={user.professorId ?? user.id}
+            returnTo="/account"
+          />
         </Container>
       </Box>
     );

@@ -151,10 +151,21 @@ function splitList(value: string): string[] {
   return value.split(/[\n,]/).map((part) => part.trim()).filter(Boolean);
 }
 
-export function ProfessorFormPage({ mode, embedded = false }: { mode: "create" | "edit"; embedded?: boolean }) {
-  const { t } = useLanguage();
-  const { user } = useUser();
-  const { id } = useParams();
+export function ProfessorFormPage({
+  mode,
+  embedded = false,
+  professorId,
+  returnTo,
+}: {
+  mode: "create" | "edit";
+  embedded?: boolean;
+  professorId?: string;
+  returnTo?: string;
+}) {
+  const { t, lang } = useLanguage();
+  const { user, updateUser } = useUser();
+  const { id: routeId } = useParams();
+  const id = professorId ?? routeId;
   const navigate = useNavigate();
   const [values, setValues] = useState<ProfessorPayload>(() => emptyProfessor());
   const pendingValues = useRef(values);
@@ -164,6 +175,7 @@ export function ProfessorFormPage({ mode, embedded = false }: { mode: "create" |
   const [loading, setLoading] = useState(mode === "edit");
   const [loaded, setLoaded] = useState(mode === "create");
   const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -371,6 +383,7 @@ export function ProfessorFormPage({ mode, embedded = false }: { mode: "create" |
     }
     const draft = pendingValues.current;
     setSaving(true);
+    setSaved(false);
     setError(null);
     try {
       let saved: Professor;
@@ -390,8 +403,19 @@ export function ProfessorFormPage({ mode, embedded = false }: { mode: "create" |
         });
       } else {
         saved = await updateProfessor(user.jwt, id!, draft);
+        const basic = saved.Basic_Information;
+        const updatedName = [basic?.firstName, basic?.middleName, basic?.lastName]
+          .map((part) => part?.[lang] || part?.en || part?.bg || "")
+          .filter(Boolean)
+          .join(" ");
+        const updatedPhoto = basic?.photo?.[lang] || basic?.photo?.en || basic?.photo?.bg;
+        updateUser({
+          ...(updatedName ? { name: updatedName } : {}),
+          ...(updatedPhoto ? { photoUrl: updatedPhoto } : {}),
+        });
       }
-      navigate(`/teachers/${saved._id}`);
+      if (returnTo) setSaved(true);
+      else navigate(`/teachers/${saved._id}`);
     } catch {
       setError(mode === "create" ? t("admin.createTeacherError") : t("admin.updateTeacherError"));
     } finally {
@@ -427,6 +451,7 @@ export function ProfessorFormPage({ mode, embedded = false }: { mode: "create" |
       submitDisabled={saving}
       embedded={embedded}
     >
+      {saved && <Alert severity="success">{t("account.saved")}</Alert>}
       {error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
       {saving && <Alert severity="info">{t("common.saving")}</Alert>}
 
