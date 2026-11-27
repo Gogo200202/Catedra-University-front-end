@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Box, Chip, CircularProgress, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import { Link } from "react-router";
 import { PageHero } from "../../components/layout/PageHero.tsx";
-import { fetchEducation } from "../../api/educationApi.ts";
+import { fetchEducation, getEducationStudyName, getStudySemesters } from "../../api/educationApi.ts";
 import type { EducationDocument } from "../../api/educationApi.ts";
 import type { ProgrammeLevel } from "../../data/programmes.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
@@ -26,7 +26,7 @@ const routeLevel: Record<ProgrammeLevel, "bachelor" | "master" | "doctoral"> = {
 };
 
 export function ProgrammesLevelPage({ level, titleKey, subtitleKey }: ProgrammesPageProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [education, setEducation] = useState<EducationDocument | null>(null);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -65,14 +65,15 @@ export function ProgrammesLevelPage({ level, titleKey, subtitleKey }: Programmes
           <Typography sx={{ py: 6, color: "text.secondary", textAlign: "center" }}>{t("education.noData")}</Typography>
         ) : (
           <Grid container spacing={3}>
-            {degreeEntries.map(([degreeName, semesters]) => {
-              const semesterEntries = Object.entries(semesters ?? {});
+            {degreeEntries.map(([degreeKey, study]) => {
+              const degreeName = getEducationStudyName(study, degreeKey, lang);
+              const semesterEntries = Object.entries(getStudySemesters(study));
               const classCount = semesterEntries.reduce((total, [, semester]) => total + (semester.classes?.length ?? 0), 0);
               return (
-                <Grid key={degreeName} size={{ xs: 12, md: 6 }}>
+                <Grid key={degreeKey} size={{ xs: 12, md: 6 }}>
                   <Paper
                     component={Link}
-                    to={`/education/${routeLevel[level]}/${encodeURIComponent(degreeName)}`}
+                    to={`/education/${routeLevel[level]}/${encodeURIComponent(degreeKey)}`}
                     elevation={1}
                     sx={{
                       display: "block",
