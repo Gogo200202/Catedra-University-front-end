@@ -25,7 +25,7 @@ export function AccountPage() {
     values: user
       ? {
           name: user.name,
-          email: user.email,
+          email: user.email ?? "",
           photoUrl: user.photoUrl ?? "",
           password: "",
         }
@@ -54,10 +54,10 @@ export function AccountPage() {
         setError(null);
         setSaved(false);
         try {
-          const payload: { name: string; email: string; photoUrl?: string; password?: string } = {
+          const payload: { name: string; email?: string; photoUrl?: string; password?: string } = {
             name: values.name,
-            email: values.email,
           };
+          if (user.email) payload.email = values.email.trim();
           if (values.photoUrl.trim()) {
             payload.photoUrl = values.photoUrl.trim();
           }
@@ -92,13 +92,17 @@ export function AccountPage() {
         required
         {...register("name", { required: true })}
       />
-      <TextField
-        label={t("auth.email")}
-        type="email"
-        fullWidth
-        required
-        {...register("email", { required: true })}
-      />
+      {user.email ? (
+        <TextField
+          label={t("auth.email")}
+          type="email"
+          fullWidth
+          required
+          {...register("email", { required: true })}
+        />
+      ) : (
+        <TextField label={t("auth.facultyNumber")} value={user.facultyNumber ?? ""} fullWidth disabled />
+      )}
       <TextField label={t("account.photoUrl")} fullWidth {...register("photoUrl")} />
       <TextField
         label={t("account.newPassword")}

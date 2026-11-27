@@ -59,16 +59,23 @@ export function TeachersPage() {
   const { t, lang } = useLanguage();
   const [professors, setProfessors] = useState<Professor[] | null>(null);
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [position, setPosition] = useState<PositionFilter>("all");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    const timeoutId = window.setTimeout(() => setDebouncedQuery(query), 300);
+    return () => window.clearTimeout(timeoutId);
+  }, [query]);
+
+  useEffect(() => {
+    if (query !== debouncedQuery) return;
     let cancelled = false;
     setProfessors(null);
     setFailed(false);
-    fetchProfessors({ page, limit: PAGE_SIZE, search: query.trim() })
+    fetchProfessors({ page, limit: PAGE_SIZE, search: debouncedQuery.trim() })
       .then((response) => {
         if (cancelled) return;
         setProfessors(response.data);
@@ -80,7 +87,7 @@ export function TeachersPage() {
     return () => {
       cancelled = true;
     };
-  }, [page, query]);
+  }, [page, query, debouncedQuery]);
 
   const filtered = useMemo(() => {
     if (!professors || position === "all") return professors ?? [];

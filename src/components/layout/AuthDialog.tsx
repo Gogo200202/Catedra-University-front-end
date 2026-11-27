@@ -1,27 +1,14 @@
 import { useState } from "react";
-import {
-  Alert,
-  Button,
-  Dialog,
-  DialogContent,
-  Stack,
-  Tab,
-  Tabs,
-  TextField,
-} from "@mui/material";
+import type { FormEvent } from "react";
+import { Alert, Button, Dialog, DialogContent, MenuItem, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-import type { TranslationKey } from "../../i18n/translations.ts";
 import { useLanguage } from "../../i18n/useLanguage.ts";
 import { useUser } from "../../context/useUser.ts";
+import type { UserRole } from "../../context/UserContext.ts";
 
 interface LoginValues {
-  email: string;
-  password: string;
-}
-
-interface RegisterValues {
-  fullName: string;
-  email: string;
+  role: UserRole;
+  identifier: string;
   password: string;
 }
 
@@ -32,144 +19,80 @@ interface AuthDialogProps {
 
 export function AuthDialog({ open, onClose }: AuthDialogProps) {
   const { t } = useLanguage();
-  const { login, register: registerUser } = useUser();
-  const [tab, setTab] = useState(0);
+  const { login } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const loginForm = useForm<LoginValues>({
-    defaultValues: { email: "", password: "" },
+  const { register, handleSubmit, getValues, reset, watch } = useForm<LoginValues>({
+    defaultValues: { role: "student", identifier: "", password: "" },
   });
-  const registerForm = useForm<RegisterValues>({
-    defaultValues: { fullName: "", email: "", password: "" },
-  });
+  const selectedRole = watch("role");
 
   const handleClose = () => {
     onClose();
-    setTab(0);
     setError(null);
     setLoading(false);
-    loginForm.reset();
-    registerForm.reset();
+    reset();
   };
 
-  const fieldLabel = (key: TranslationKey) => t(key);
+  const submitLogin = async (values: LoginValues) => {
+    setError(null);
+    setLoading(true);
+    try {
+      await login(values.identifier.trim(), values.password, values.role);
+      handleClose();
+    } catch {
+      setError(t("auth.loginError"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    if (selectedRole === "admin") {
+      // Temporary admin access for the local frontend while admin auth is being implemented.
+      event.preventDefault();
+      void submitLogin(getValues());
+      return;
+    }
+    void handleSubmit(submitLogin)(event);
+  };
+
+  const identifierLabel = selectedRole === "student"
+    ? t("auth.facultyNumber")
+    : selectedRole === "teacher"
+      ? t("auth.email")
+      : t("auth.adminUsername");
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
       <DialogContent sx={{ pt: 3 }}>
-        <Tabs
-          value={tab}
-          onChange={(_, value: number) => {
-            setTab(value);
-            setError(null);
-          }}
-          variant="fullWidth"
-          sx={{ mb: 3 }}
-        >
-          <Tab label={t("auth.login")} />
-          <Tab label={t("auth.register")} />
-        </Tabs>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-
-        {tab === 0 ? (
-          <Stack
-            component="form"
-            spacing={2.5}
-            noValidate
-            onSubmit={loginForm.handleSubmit(async (values) => {
-              setError(null);
-              setLoading(true);
-              try {
-                await login(values.email, values.password);
-                handleClose();
-              } catch {
-                setError(t("auth.loginError"));
-              } finally {
-                setLoading(false);
-              }
-            })}
-          >
-            <TextField
-              type="email"
-              label={fieldLabel("auth.email")}
-              fullWidth
-              required
-              {...loginForm.register("email", { required: true })}
-            />
-            <TextField
-              type="password"
-              label={fieldLabel("auth.password")}
-              fullWidth
-              required
-              autoComplete="current-password"
-              {...loginForm.register("password", { required: true })}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
-              disabled={loading}
-            >
-              {t("auth.login")}
-            </Button>
-          </Stack>
-        ) : (
-          <Stack
-            component="form"
-            spacing={2.5}
-            noValidate
-            onSubmit={registerForm.handleSubmit(async (values) => {
-              setError(null);
-              setLoading(true);
-              try {
-                await registerUser(values.fullName, values.email, values.password);
-                handleClose();
-              } catch {
-                setError(t("auth.registerError"));
-              } finally {
-                setLoading(false);
-              }
-            })}
-          >
-            <TextField
-              label={fieldLabel("auth.fullName")}
-              fullWidth
-              required
-              {...registerForm.register("fullName", { required: true })}
-            />
-            <TextField
-              type="email"
-              label={fieldLabel("auth.email")}
-              fullWidth
-              required
-              {...registerForm.register("email", { required: true })}
-            />
-            <TextField
-              type="password"
-              label={fieldLabel("auth.password")}
-              fullWidth
-              required
-              autoComplete="new-password"
-              {...registerForm.register("password", { required: true })}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              size="large"
-              disabled={loading}
-            >
-              {t("auth.register")}
-            </Button>
-          </Stack>
-        )}
+        <Stack component="form" spacing={2.5} noValidate onSubmit={handleFormSubmit}>
+          {error && <Alert severity="error">{error}</Alert>}
+          <TextField select label={t("auth.role")} fullWidth {...register("role")}>
+            <MenuItem value="admin">{t("roles.admin")}</MenuItem>
+            <MenuItem value="teacher">{t("roles.teacher")}</MenuItem>
+            <MenuItem value="student">{t("roles.student")}</MenuItem>
+          </TextField>
+          <TextField
+            type={selectedRole === "teacher" ? "email" : "text"}
+            label={identifierLabel}
+            fullWidth
+            required={selectedRole !== "admin"}
+            autoComplete="username"
+            {...register("identifier", selectedRole === "admin" ? {} : { required: true })}
+          />
+          <TextField
+            type="password"
+            label={t("auth.password")}
+            fullWidth
+            required={selectedRole !== "admin"}
+            autoComplete="current-password"
+            {...register("password", selectedRole === "admin" ? {} : { required: true })}
+          />
+          <Button type="submit" variant="contained" color="primary" size="large" disabled={loading}>
+            {t("auth.login")}
+          </Button>
+        </Stack>
       </DialogContent>
     </Dialog>
   );

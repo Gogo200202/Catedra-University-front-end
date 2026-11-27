@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import {
   Accordion,
@@ -132,28 +132,35 @@ function getAtPath(source: unknown, path: PathPart[]): unknown {
 }
 
 function setAtPath(source: ProfessorPayload, path: PathPart[], value: unknown): ProfessorPayload {
-  const clone = structuredClone(source);
-  let current = clone as unknown as Record<string, unknown>;
-  for (let index = 0; index < path.length - 1; index += 1) {
-    const key = String(path[index]);
-    const next = current[key];
-    if (!isRecord(next) && !Array.isArray(next)) current[key] = typeof path[index + 1] === "number" ? [] : {};
-    current = current[key] as Record<string, unknown>;
-  }
-  current[String(path[path.length - 1])] = value;
-  return clone;
+  const updateAt = (current: unknown, index: number): unknown => {
+    if (index === path.length) return value;
+    const part = path[index];
+    if (Array.isArray(current) && typeof part === "number") {
+      const copy = current.slice();
+      copy[part] = updateAt(copy[part], index + 1);
+      return copy;
+    }
+    const record = isRecord(current) ? current : {};
+    const key = String(part);
+    return { ...record, [key]: updateAt(record[key], index + 1) };
+  };
+  return updateAt(source, 0) as ProfessorPayload;
 }
 
 function splitList(value: string): string[] {
   return value.split(/[\n,]/).map((part) => part.trim()).filter(Boolean);
 }
 
-export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
+export function ProfessorFormPage({ mode, embedded = false }: { mode: "create" | "edit"; embedded?: boolean }) {
   const { t } = useLanguage();
   const { user } = useUser();
   const { id } = useParams();
   const navigate = useNavigate();
   const [values, setValues] = useState<ProfessorPayload>(() => emptyProfessor());
+  const pendingValues = useRef(values);
+  const [structureRevision, setStructureRevision] = useState(0);
+  const accountEmail = useRef("");
+  const accountPassword = useRef("");
   const [loading, setLoading] = useState(mode === "edit");
   const [loaded, setLoaded] = useState(mode === "create");
   const [saving, setSaving] = useState(false);
@@ -172,7 +179,9 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
     fetchProfessor(id)
       .then((professor) => {
         if (!cancelled) {
-          setValues(mergeDefaults(emptyProfessor(), professor) as ProfessorPayload);
+          const merged = mergeDefaults(emptyProfessor(), professor) as ProfessorPayload;
+          pendingValues.current = merged;
+          setValues(merged);
           setLoaded(true);
           setError(null);
         }
@@ -189,7 +198,10 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
   }, [id, mode, t]);
 
   const update = (path: PathPart[], value: unknown) => {
-    setValues((current) => setAtPath(current, path, value));
+    const next = setAtPath(pendingValues.current, path, value);
+    pendingValues.current = next;
+    setValues(next);
+    setStructureRevision((revision) => revision + 1);
   };
 
   const textField = (
@@ -203,8 +215,11 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
       type={options.type ?? "text"}
       multiline={options.multiline}
       rows={options.rows}
-      value={String(getAtPath(values, path) ?? "")}
-      onChange={(event) => update(path, options.type === "number" ? Number(event.target.value) : event.target.value)}
+      defaultValue={String(getAtPath(values, path) ?? "")}
+      onChange={(event) => {
+        const nextValue = options.type === "number" ? Number(event.target.value) : event.target.value;
+        pendingValues.current = setAtPath(pendingValues.current, path, nextValue);
+      }}
       slotProps={options.multiline ? { inputLabel: { shrink: true } } : undefined}
     />
   );
@@ -232,14 +247,27 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
             {rows.map((_, index) => (
               <Paper key={index} variant="outlined" sx={{ p: 2 }}>
                 <Stack direction="row" sx={{ justifyContent: "flex-end" }}>
-                  <IconButton aria-label={t("common.remove")} onClick={() => update(path, rows.filter((_, rowIndex) => rowIndex !== index))}>
+                  <IconButton
+                    aria-label={t("common.remove")}
+                    onClick={() => {
+                      const latestRows = getAtPath(pendingValues.current, path);
+                      if (Array.isArray(latestRows)) update(path, latestRows.filter((_, rowIndex) => rowIndex !== index));
+                    }}
+                  >
                     <DeleteOutlined />
                   </IconButton>
                 </Stack>
                 {bilingualFields([...path, index], `${title} ${index + 1}`)}
               </Paper>
             ))}
-            <Button startIcon={<Add />} onClick={() => update(path, [...rows, blankBilingual()])} sx={{ alignSelf: "flex-start"}}>
+            <Button
+              startIcon={<Add />}
+              onClick={() => {
+                const latestRows = getAtPath(pendingValues.current, path);
+                update(path, [...(Array.isArray(latestRows) ? latestRows : []), blankBilingual()]);
+              }}
+              sx={{ alignSelf: "flex-start" }}
+            >
               {t("common.add")}
             </Button>
           </Stack>
@@ -258,8 +286,10 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
         multiline
         rows={3}
         helperText={t("admin.listInputHint")}
-        value={current.join("\n")}
-        onChange={(event) => update(path, splitList(event.target.value))}
+        defaultValue={current.join("\n")}
+        onChange={(event) => {
+          pendingValues.current = setAtPath(pendingValues.current, path, splitList(event.target.value));
+        }}
         slotProps={{ inputLabel: { shrink: true } }}
       />
     );
@@ -284,7 +314,13 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
               <Paper key={index} variant="outlined" sx={{ p: 2 }}>
                 <Stack direction="row" sx={{ justifyContent: "space-between", mb: 1 }}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>{title} {index + 1}</Typography>
-                  <IconButton aria-label={t("common.remove")} onClick={() => update(path, rows.filter((_, rowIndex) => rowIndex !== index))}>
+                  <IconButton
+                    aria-label={t("common.remove")}
+                    onClick={() => {
+                      const latestRows = getAtPath(pendingValues.current, path);
+                      if (Array.isArray(latestRows)) update(path, latestRows.filter((_, rowIndex) => rowIndex !== index));
+                    }}
+                  >
                     <DeleteOutlined />
                   </IconButton>
                 </Stack>
@@ -298,7 +334,14 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
                 </Stack>
               </Paper>
             ))}
-            <Button startIcon={<Add />} onClick={() => update(path, [...rows, createRow()])} sx={{ alignSelf: "flex-start" }}>
+            <Button
+              startIcon={<Add />}
+              onClick={() => {
+                const latestRows = getAtPath(pendingValues.current, path);
+                update(path, [...(Array.isArray(latestRows) ? latestRows : []), createRow()]);
+              }}
+              sx={{ alignSelf: "flex-start" }}
+            >
               {t("common.add")}
             </Button>
           </Stack>
@@ -326,12 +369,28 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
       setError(t("teachers.notFound"));
       return;
     }
+    const draft = pendingValues.current;
     setSaving(true);
     setError(null);
     try {
       let saved: Professor;
-      if (mode === "create") saved = await createProfessor(user.jwt, values);
-      else saved = await updateProfessor(user.jwt, id!, values);
+      if (mode === "create") {
+        const payload = structuredClone(draft);
+        const currentEmails = payload.Contact_Information?.emails ?? [];
+        payload.Contact_Information = {
+          ...payload.Contact_Information,
+          emails: [...new Set([...currentEmails, accountEmail.current.trim()])],
+        };
+        saved = await createProfessor(user.jwt, {
+          ...payload,
+          professorLoginAccount: {
+            email: accountEmail.current.trim(),
+            password: accountPassword.current,
+          },
+        });
+      } else {
+        saved = await updateProfessor(user.jwt, id!, draft);
+      }
       navigate(`/teachers/${saved._id}`);
     } catch {
       setError(mode === "create" ? t("admin.createTeacherError") : t("admin.updateTeacherError"));
@@ -348,6 +407,10 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
     return <Container sx={{ py: 8 }}><Alert severity="error">{error}</Alert></Container>;
   }
 
+  if (mode === "create" && user?.role !== "admin") {
+    return <Container sx={{ py: 8 }}><Alert severity="warning">{t("admin.adminOnly")}</Alert></Container>;
+  }
+
   const position = ["Basic_Information", "academicPosition"];
   const education = ["Education"];
   const competence = ["Professional_Competences"];
@@ -356,11 +419,13 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
 
   return (
     <AdminFormShell
+      key={structureRevision}
       titleKey={mode === "create" ? "admin.createTeacher" : "admin.editTeacher"}
       subtitleKey="admin.teacherSubtitle"
       submitLabel={mode === "create" ? t("admin.submit") : t("account.save")}
       onSubmit={submit}
       submitDisabled={saving}
+      embedded={embedded}
     >
       {error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
       {saving && <Alert severity="info">{t("common.saving")}</Alert>}
@@ -377,6 +442,25 @@ export function ProfessorFormPage({ mode }: { mode: "create" | "edit" }) {
         {bilingualFields(["Basic_Information", "officeNumber"], t("admin.field.officeRoom"))}
         {bilingualFields(["Basic_Information", "administrativeFunction"], t("admin.field.administrativeFunction"))}
       </>, true)}
+
+      {mode === "create" && section(t("admin.teacherAccountTitle"), <>
+        <TextField
+          label={t("auth.email")}
+          type="email"
+          defaultValue={accountEmail.current}
+          onChange={(event) => { accountEmail.current = event.target.value; }}
+          autoComplete="username"
+          fullWidth
+        />
+        <TextField
+          label={t("auth.password")}
+          type="password"
+          defaultValue={accountPassword.current}
+          onChange={(event) => { accountPassword.current = event.target.value; }}
+          autoComplete="new-password"
+          fullWidth
+        />
+      </>)}
 
       {section(t("teachers.section.education"), <>
         {bilingualFields([...education, "university"], t("admin.field.university"))}

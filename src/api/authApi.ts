@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { User } from "../context/UserContext.ts";
+import type { UserRole } from "../context/UserContext.ts";
 
 const api = axios.create({
   baseURL: "/api",
@@ -8,32 +8,46 @@ const api = axios.create({
 export interface AuthResponse {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
+  facultyNumber?: string | null;
+  professorId?: string | null;
   photoUrl: string | null;
-  role: User["role"];
+  role: UserRole;
   jwt: string;
 }
 
-export async function registerUser(
-  name: string,
-  email: string,
-  password: string,
-): Promise<AuthResponse> {
-  const { data } = await api.post<AuthResponse>("/auth/register", {
-    name,
-    email,
-    password,
-  });
+export interface CreateAccountPayload {
+  name: string;
+  password: string;
+  role: Extract<UserRole, "student" | "teacher">;
+  email?: string;
+  facultyNumber?: string;
+  professorId?: string;
+}
+
+export interface CreatedAccount {
+  id: string;
+  name: string;
+  email: string | null;
+  facultyNumber: string | null;
+  professorId: string | null;
+  photoUrl: string | null;
+  role: UserRole;
+}
+
+export async function loginUser(identifier: string, password: string, role: UserRole): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>("/auth/login", { identifier, email: identifier, password, role });
   return data;
 }
 
-export async function loginUser(
-  email: string,
-  password: string,
-): Promise<AuthResponse> {
-  const { data } = await api.post<AuthResponse>("/auth/login", {
-    email,
-    password,
+export async function loginProfessor(email: string, password: string): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>("/professors/auth", { email, password });
+  return data;
+}
+
+export async function createAccount(token: string, payload: CreateAccountPayload): Promise<CreatedAccount> {
+  const { data } = await api.post<CreatedAccount>("/auth/admin/accounts", payload, {
+    headers: { Authorization: `Bearer ${token}` },
   });
   return data;
 }

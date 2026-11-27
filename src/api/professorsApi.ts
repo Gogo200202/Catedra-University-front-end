@@ -140,6 +140,13 @@ export interface PaginatedProfessors {
 
 export type ProfessorPayload = Omit<Professor, "_id" | "createdAt" | "updatedAt">;
 
+export interface CreateProfessorPayload extends ProfessorPayload {
+  professorLoginAccount: {
+    email: string;
+    password: string;
+  };
+}
+
 export interface FetchProfessorsParams {
   page?: number;
   limit?: number;
@@ -162,7 +169,7 @@ export async function fetchProfessor(id: string): Promise<Professor> {
   return data;
 }
 
-export async function createProfessor(token: string, payload: ProfessorPayload): Promise<Professor> {
+export async function createProfessor(token: string, payload: CreateProfessorPayload): Promise<Professor> {
   const { data } = await api.post<Professor>("/professors", payload, withBearerToken(token));
   return data;
 }

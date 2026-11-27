@@ -263,7 +263,7 @@ export function NavBar() {
               {user.name}
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
-              {user.email} · {user.role}
+              {user.email ?? user.facultyNumber ?? user.name} · {user.role}
             </Typography>
           </Box>
           <Divider />

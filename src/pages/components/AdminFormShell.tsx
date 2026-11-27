@@ -9,6 +9,7 @@ interface AdminFormShellProps {
   submitLabel: string;
   onSubmit: FormEventHandler<HTMLFormElement>;
   submitDisabled?: boolean;
+  embedded?: boolean;
   children: ReactNode;
 }
 
@@ -18,34 +19,39 @@ export function AdminFormShell({
   submitLabel,
   onSubmit,
   submitDisabled = false,
+  embedded = false,
   children,
 }: AdminFormShellProps) {
+  const form = (
+    <Paper
+      elevation={1}
+      component="form"
+      noValidate
+      onSubmit={onSubmit}
+      sx={{ p: { xs: 3, md: 5 }, maxWidth: embedded ? "none" : 720, mx: embedded ? 0 : "auto" }}
+    >
+      <Stack spacing={3}>
+        {children}
+        <Button
+          type="submit"
+          disabled={submitDisabled}
+          variant="contained"
+          color="secondary"
+          size="large"
+          sx={{ alignSelf: "flex-start" }}
+        >
+          {submitLabel}
+        </Button>
+      </Stack>
+    </Paper>
+  );
+
+  if (embedded) return form;
+
   return (
     <Box>
       <PageHero titleKey={titleKey} subtitleKey={subtitleKey} />
-      <Container sx={{ py: 6 }}>
-        <Paper
-          elevation={1}
-          component="form"
-          noValidate
-          onSubmit={onSubmit}
-          sx={{ p: { xs: 3, md: 5 }, maxWidth: 720, mx: "auto" }}
-        >
-          <Stack spacing={3}>
-            {children}
-            <Button
-              type="submit"
-              disabled={submitDisabled}
-              variant="contained"
-              color="secondary"
-              size="large"
-              sx={{ alignSelf: "flex-start" }}
-            >
-              {submitLabel}
-            </Button>
-          </Stack>
-        </Paper>
-      </Container>
+      <Container sx={{ py: 6 }}>{form}</Container>
     </Box>
   );
 }

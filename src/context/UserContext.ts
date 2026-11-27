@@ -7,7 +7,9 @@ export const DEFAULT_PHOTO_URL = "no photo implemented for now";
 export interface User {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
+  facultyNumber?: string | null;
+  professorId?: string | null;
   photoUrl: string | null;
   role: UserRole;
   jwt: string;
@@ -15,8 +17,7 @@ export interface User {
 
 export interface UserContextValue {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (identifier: string, password: string, role: UserRole) => Promise<void>;
   updateUser: (updates: Partial<User>) => void;
   logout: () => void;
 }
