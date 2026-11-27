@@ -25,7 +25,7 @@ const actions = [
     path: "/admin/events/create",
     icon: CalendarMonth,
     color: "#6a1b9a",
-    adminOnly: false,
+    adminOnly: true,
   },
 ] as const;
 

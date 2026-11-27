@@ -275,7 +275,7 @@ export function TeacherDetailPage() {
               <Button data-html2canvas-ignore="" variant="contained" color="secondary" size="small" startIcon={<PictureAsPdf />} onClick={() => void handleExportPdf()}>
                 {t("teachers.exportPdf")}
               </Button>
-              {user?.jwt && (
+              {user?.role === "admin" && user.jwt && (
                 <>
                   <Button data-html2canvas-ignore="" variant="contained" size="small" startIcon={<EditOutlined />} onClick={() => navigate(`/admin/teachers/edit/${professor._id}`)}>
                     {t("admin.editTeacher")}

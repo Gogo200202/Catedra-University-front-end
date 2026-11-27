@@ -74,6 +74,9 @@ export function NavBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [accountAnchor, setAccountAnchor] = useState<HTMLElement | null>(null);
+  const visibleNavItems = user?.role === "admin"
+    ? navItems
+    : navItems.filter((item) => item.key !== "admin");
 
   const handleOpenMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -156,7 +159,7 @@ export function NavBar() {
               gap: 0.5,
             }}
           >
-            {navItems.map((item) =>
+            {visibleNavItems.map((item) =>
               item.children ? (
                 <Box key={item.key}>
                   <Button
@@ -219,7 +222,7 @@ export function NavBar() {
           </Typography>
           <Divider />
           <List onClick={() => setDrawerOpen(false)}>
-            {navItems.map((item) =>
+            {visibleNavItems.map((item) =>
               item.children ? (
                 <Box key={item.key}>
                   <ListItemButton component={Link} to={item.path}>
